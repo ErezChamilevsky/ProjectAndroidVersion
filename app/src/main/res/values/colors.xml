@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="login_btnColor">#FF0000</color>
+    <color name="register_titleColor">#FF0000</color>
+    <color name="register_crAcBtnColor">#5dbac3</color>
+    <color name="register_notResMsgCol">#871136</color>
+    <color name="ad_new_vid_uploadBtnCol">#FF0000</color>
 </resources>

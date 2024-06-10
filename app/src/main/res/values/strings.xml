@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Youtube</string>
+    <string name="login_etUsername">Username</string>
+    <string name="login_etPassword">Password</string>
+    <string name="login_btnLogin">Login</string>
+    <string name="img_desc_youtubelogo">YoutubeLogo</string>
+    <string name="register_regBtn">Register</string>
+    <string name="reg_page_confirm_password">Confirm Password</string>
+    <string name="reg_page_disply_name">Disply Name</string>
+    <string name="register_titleFont">sans-serif-black</string>
+    <string name="register_uploadProfileImage">Upload profile image</string>
+    <string name="register_createAnAccountBtn">create an account</string>
+    <string name="register_notRegisterMsg">Not register yet?</string>
+    <string name="ad_new_vid_vidTitle">Create a title</string>
+    <string name="ad_new_vid_uplaodVidBtn">For uploading Video press here</string>
+    <string name="register_title">Welcome to FooTube register page</string>
+    <string name="ad_new_vid_descHint">write the video description here</string>
 </resources>
