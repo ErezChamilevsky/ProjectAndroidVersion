@@ -10,7 +10,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/registerTopImg"
         android:layout_width="105dp"
         android:layout_height="95dp"
         android:contentDescription="@string/img_desc_youtubelogo"
@@ -23,7 +23,7 @@
         app:srcCompat="@drawable/youtube_logo" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/registerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/register_title"
@@ -38,7 +38,6 @@
         app:layout_constraintVertical_bias="0.207" />
 
 
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -46,10 +45,12 @@
         android:orientation="vertical"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.589"
+        tools:layout_editor_absoluteX="0dp">
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/registerUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -58,26 +59,26 @@
             android:inputType="text" />
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/registerPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
             android:layout_marginBottom="10dp"
             android:ems="10"
-            android:hint="@string/login_etPassword" />
+            android:hint="@string/login_etPassword"
+            android:inputType="textPassword" />
 
 
         <EditText
-            android:id="@+id/editTextTextPassword2"
+            android:id="@+id/registerConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
             android:layout_marginBottom="10dp"
             android:ems="10"
-            android:hint="@string/reg_page_confirm_password" />
+            android:hint="@string/reg_page_confirm_password"
+            android:inputType="textPassword" />
 
         <EditText
-            android:id="@+id/editTextText2"
+            android:id="@+id/registerDisplayName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -86,22 +87,37 @@
             android:inputType="text" />
 
         <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
+            android:id="@+id/registerUplProImgBtn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#438178"
             android:text="@string/register_uploadProfileImage" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
-            android:backgroundTint="#0000FF"
-            android:text="@string/register_regBtn" />
+            app:srcCompat="?attr/selectableItemBackground"
+            tools:layout_editor_absoluteX="128dp"
+            tools:layout_editor_absoluteY="526dp" />
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#0000FF"
+        android:text="@string/register_regBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.991" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

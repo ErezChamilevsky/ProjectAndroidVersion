@@ -3,12 +3,16 @@ package com.example.youtube;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.List;
 
 public class LoginScreen extends AppCompatActivity {
 
@@ -28,17 +32,34 @@ public class LoginScreen extends AppCompatActivity {
         createAnAccountBtn.setOnClickListener(v -> {
             Intent moveToRegister = new Intent(this, RegisterScreen.class);
             startActivity(moveToRegister);
-
-            /*
-            Button loginButton = findViewById(R.id.LoginButton);
-            loginButton.setOnClickListener(v -> {
-                Intent moveToHomeScreen = new Intent(this, //nameOfHomeScreen.class);
-                startActivity(moveToHomeScreen);
-            });*/
-
         });
 
+            Button loginButton = findViewById(R.id.LoginButton);
+            loginButton.setOnClickListener(v -> {
+                // reference all EditText an imageView into variables.
+                EditText userNameEditText = findViewById(R.id.LoginUsername);
+                EditText passwordEditText = findViewById(R.id.LoginPassword);
 
+                //extract the text from Edit text.
+                String userName = userNameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
 
+                int userExist = 0;
+                List<User> users = UserRepository.getInstance().getUsers(); //get the users array.
+                // iterate the List and check if user details actually exist
+                for (int i = 0; i < users.size(); i++){
+                    if(userName.equals(users.get(i).getUserName()) && password.equals(users.get(i).getPassword())){
+                         /*Intent moveToHomeScreen = new Intent(this, //nameOfHomeScreen.class); //need to connect to home page
+                            startActivity(moveToHomeScreen);*/
+                            //break;
+                        userExist = 1;
+                        Toast.makeText(this, "Login success", Toast.LENGTH_SHORT).show(); //need to delete.
+                    }
+                }
+                    // if the user don't appear in users at all.
+                    if(userExist == 0) {
+                        Toast.makeText(this, "Username or password are wrong", Toast.LENGTH_SHORT).show();
+                    }
+            });
     }
 }
