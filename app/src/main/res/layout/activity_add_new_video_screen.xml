@@ -58,8 +58,8 @@
         android:id="@+id/uploadVideoBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ad_new_vid_uplaodVidBtn"
-        android:backgroundTint="@color/ad_new_vid_uploadBtnCol"
+        android:text="@string/ad_new_vid_chooseVidBtn"
+        android:backgroundTint="@color/ad_new_vid_chooseBtnCol"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,5 +78,18 @@
         app:layout_constraintTop_toTopOf="@+id/videoView"
         app:layout_constraintVertical_bias="0.619"
         tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ad_new_vid_uploadVideoBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.994"
+        android:backgroundTint="@color/ad_new_vid_uploadBtnCol"/>
     />
 </androidx.constraintlayout.widget.ConstraintLayout>
