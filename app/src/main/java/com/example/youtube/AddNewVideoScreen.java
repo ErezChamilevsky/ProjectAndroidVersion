@@ -1,10 +1,18 @@
 package com.example.youtube;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,7 +24,16 @@ public class AddNewVideoScreen extends AppCompatActivity {
     private static final int REQUEST_VIDEO_CAPTURE = 1;
     private static final int REQUEST_VIDEO_PICK = 2;
 
-    private VideoView videoView;
+    private static final int REQUEST_IMAGE_CAPTURE = 3;
+    private static final int REQUEST_IMAGE_PICK = 4;
+    private Button chooseVideobtn;
+    private Button chooseImgVideobtn;
+    private Button changeVideoButton;
+    private Button changeImgVideoButton;
+    private Button uploadVideoBtn;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,13 +45,121 @@ public class AddNewVideoScreen extends AppCompatActivity {
             return insets;
         });
 
-        videoView = findViewById(R.id.videoView);
-        Button uploadVideo = findViewById(R.id.uploadVideoBtn);
-        uploadVideo.setOnClickListener(v -> {
+        chooseVideobtn = findViewById(R.id.chooseVideoBtn);
+        changeVideoButton = findViewById(R.id.changeVideoButton);
+        chooseImgVideobtn = findViewById(R.id.chooseImgVideoBtn);
+        changeImgVideoButton = findViewById(R.id.changeImgVideoButton);
+        uploadVideoBtn = findViewById(R.id.uploadVideoBtn);
 
-        });
+        chooseVideobtn.setOnClickListener(v -> showVideoPickerDialog());
+        changeVideoButton.setOnClickListener(v -> showVideoPickerDialog());
+        chooseImgVideobtn.setOnClickListener(v -> showImagePickerDialog());
+        changeImgVideoButton.setOnClickListener(v -> showImagePickerDialog());
+        uploadVideoBtn.setOnClickListener(v -> addVideoToRepo());
 
 
+        //hide the change video buttons till user choose video.
+        changeVideoButton.setVisibility(View.GONE);
+        changeImgVideoButton.setVisibility(View.GONE);
 
+    }
+
+    //need to define new video object and add him to VideoRepo
+    //Video uploadVideo = new Video()
+    private void addVideoToRepo() {
+
+    }
+
+
+    // Method to display video picker dialog
+    private void showVideoPickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Video")
+                .setItems(new String[]{"Camera", "Gallery"}, (dialog, which) -> {
+                    switch (which) {
+                        case 0: // Camera
+                            Intent cameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                            startActivityForResult(cameraIntent, REQUEST_VIDEO_CAPTURE );
+                            break;
+                        case 1: // Gallery
+                            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(galleryIntent, REQUEST_VIDEO_PICK);
+                            break;
+                    }
+                })
+                .show();
+    }
+
+
+    // Method to display image picker dialog
+    private void showImagePickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Image")
+                .setItems(new String[]{"Camera", "Gallery"}, (dialog, which) -> {
+                    switch (which) {
+                        case 0: // Camera
+                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                            break;
+                        case 1: // Gallery
+                            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(galleryIntent, REQUEST_IMAGE_PICK);
+                            break;
+                    }
+                })
+                .show();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_VIDEO_CAPTURE:  //if video is from camera
+                    playVideo(data.getData());
+                    // Hide the upload button after the video is selected or captured
+                    chooseVideobtn.setVisibility(View.GONE);
+                    changeVideoButton.setVisibility(View.VISIBLE);
+                    break;
+                case REQUEST_VIDEO_PICK:  //if video is from gallery
+                    Uri selectedVideoUri = data.getData();
+                    playVideo(selectedVideoUri);
+                    // Hide the upload button after the video is selected or captured
+                    chooseVideobtn.setVisibility(View.GONE);
+                    changeVideoButton.setVisibility(View.VISIBLE);
+                    break;
+
+                case REQUEST_IMAGE_CAPTURE:  //if image video is from camera
+                    ImageView imageView1 = findViewById(R.id.VideoImageImageView);
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        imageView1.setImageBitmap(imageBitmap);
+                    }
+                    // Hide the upload button after the image video is selected or captured
+                    chooseImgVideobtn.setVisibility(View.GONE);
+                    changeImgVideoButton.setVisibility(View.VISIBLE);
+                    break;
+                case REQUEST_IMAGE_PICK:   //if image video is from gallery.
+                    Uri ImageVideo = data.getData();
+                    ImageView imageView2 = findViewById(R.id.VideoImageImageView);
+                    imageView2.setImageURI(ImageVideo);
+                    // Hide the upload button after the image video is selected or captured
+                    chooseImgVideobtn.setVisibility(View.GONE);
+                    changeImgVideoButton.setVisibility(View.VISIBLE);
+                    break;
+            }
+
+        }
+    }
+
+
+    /*
+    * this method play the video in the videoView*/
+    private void playVideo(Uri videoUri) {
+        VideoView chosenVideoView = findViewById(R.id.addVideoView);
+        chosenVideoView.setVideoURI(videoUri);
+        chosenVideoView.start();
     }
 }

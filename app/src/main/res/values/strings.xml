@@ -12,7 +12,11 @@
     <string name="register_createAnAccountBtn">create an account</string>
     <string name="register_notRegisterMsg">Not register yet?</string>
     <string name="ad_new_vid_vidTitle">Create a title</string>
-    <string name="ad_new_vid_uplaodVidBtn">For uploading Video press here</string>
+    <string name="ad_new_vid_chooseVidBtn">For choosing Video press here</string>
     <string name="register_title">Welcome to FooTube register page</string>
     <string name="ad_new_vid_descHint">write the video description here</string>
+    <string name="ad_new_vid_uploadVideoBtn">Upload Video</string>
+    <string name="ad_new_vid_changeVideoBtn">Change Video</string>
+    <string name="ad_new_vid_chooseVidImgBtn">For choosing video image press here</string>
+    <string name="ad_new_vid_changeImgVideoBtn">change Img Video</string>
 </resources>
