@@ -16,10 +16,10 @@
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".AddNewVideoScreen"
+            android:name=".LoginScreen"
             android:exported="false" />
         <activity
-            android:name=".LoginScreen"
+            android:name=".AddNewVideoScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

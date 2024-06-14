@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AddNewVideoScreen extends AppCompatActivity {
 
@@ -31,6 +36,8 @@ public class AddNewVideoScreen extends AppCompatActivity {
     private Button changeVideoButton;
     private Button changeImgVideoButton;
     private Button uploadVideoBtn;
+    private Uri selectedVideoUri;
+    private Uri ImageVideo;
 
 
 
@@ -64,10 +71,39 @@ public class AddNewVideoScreen extends AppCompatActivity {
 
     }
 
-    //need to define new video object and add him to VideoRepo
-    //Video uploadVideo = new Video()
-    private void addVideoToRepo() {
 
+
+    private void addVideoToRepo() {
+        VideoRepository video = VideoRepository.getInstance();
+
+        EditText videoTitleEditText = findViewById(R.id.newVideoTitle);
+        EditText videoDescriptionEditText = findViewById(R.id.newVideoDescription);
+
+        String videoTitle = videoTitleEditText.getText().toString();
+        String videoDescription = videoDescriptionEditText.getText().toString();
+        String publicationDate = null;
+        String userName = UserRepository.getInstance().getLoggedUser().getUserName();
+        int userId = UserRepository.getInstance().getLoggedUser().getId();
+
+        //set The time now to publication Date
+        DateTimeFormatter dtf = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        }
+        LocalDateTime now = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            now = LocalDateTime.now();
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            publicationDate = dtf.format(now);
+        }
+
+        Video uploadVideo = new Video(userName,userId,this.ImageVideo,this.selectedVideoUri,videoTitle,publicationDate,videoDescription);
+        VideoRepository.getInstance().addVideo(uploadVideo); //add video to ArrayList in the Repo.
+
+        Intent moveToLogin = new Intent(this, LoginScreen.class);
+        startActivity(moveToLogin);
+        Toast.makeText(this, "Video added successfully", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -117,13 +153,14 @@ public class AddNewVideoScreen extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_VIDEO_CAPTURE:  //if video is from camera
-                    playVideo(data.getData());
+                    selectedVideoUri = data.getData();
+                    playVideo(selectedVideoUri);
                     // Hide the upload button after the video is selected or captured
                     chooseVideobtn.setVisibility(View.GONE);
                     changeVideoButton.setVisibility(View.VISIBLE);
                     break;
                 case REQUEST_VIDEO_PICK:  //if video is from gallery
-                    Uri selectedVideoUri = data.getData();
+                    selectedVideoUri = data.getData();
                     playVideo(selectedVideoUri);
                     // Hide the upload button after the video is selected or captured
                     chooseVideobtn.setVisibility(View.GONE);
@@ -142,7 +179,7 @@ public class AddNewVideoScreen extends AppCompatActivity {
                     changeImgVideoButton.setVisibility(View.VISIBLE);
                     break;
                 case REQUEST_IMAGE_PICK:   //if image video is from gallery.
-                    Uri ImageVideo = data.getData();
+                    ImageVideo = data.getData();
                     ImageView imageView2 = findViewById(R.id.VideoImageImageView);
                     imageView2.setImageURI(ImageVideo);
                     // Hide the upload button after the image video is selected or captured

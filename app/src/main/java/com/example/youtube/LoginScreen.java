@@ -49,7 +49,8 @@ public class LoginScreen extends AppCompatActivity {
                 // iterate the List and check if user details actually exist
                 for (int i = 0; i < users.size(); i++){
                     if(userName.equals(users.get(i).getUserName()) && password.equals(users.get(i).getPassword())){
-                         /*Intent moveToHomeScreen = new Intent(this, //nameOfHomeScreen.class); //need to connect to home page
+                        UserRepository.getInstance().setLoggedUser(users.get(i)); //set the logged user attribute be the user we found that match.
+                        /*Intent moveToHomeScreen = new Intent(this, //nameOfHomeScreen.class); //need to connect to home page
                             startActivity(moveToHomeScreen);*/
                             //break;
                         userExist = 1;

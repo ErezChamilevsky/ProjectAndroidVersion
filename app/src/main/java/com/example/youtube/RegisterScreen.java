@@ -1,6 +1,8 @@
 package com.example.youtube;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,6 +19,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class RegisterScreen extends AppCompatActivity {
+
+    private static final int PICK_IMAGE_REQUEST = 3;
+    private static final int CAPTURE_IMAGE_REQUEST = 4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,17 +34,13 @@ public class RegisterScreen extends AppCompatActivity {
             return insets;
         });
 
-
-
         /*
         * this lines implement the logic when "upload profile image" button pressed
         * */
         Button uploadProfileImage = findViewById(R.id.registerUplProImgBtn);
         uploadProfileImage.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK , MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, 3);
+            showImagePickerDialog();
         });
-
 
         /*
          * this lines implement the logic when "Register" button pressed
@@ -46,48 +48,49 @@ public class RegisterScreen extends AppCompatActivity {
         Button registerBtn = findViewById(R.id.registerBtn);
         registerBtn.setOnClickListener(v -> {
 
-            // reference all EditText an imageView into variables.
+            // Reference all EditText and ImageView into variables
             EditText userNameEditText = findViewById(R.id.registerUsername);
             EditText passwordEditText = findViewById(R.id.registerPassword);
             EditText confirmPasswordEditText = findViewById(R.id.registerConfirmPassword);
             EditText displayNameEditText = findViewById(R.id.registerDisplayName);
             ImageView profileImageImageView = findViewById(R.id.profileImageView);
 
-
-            //extract the text from Edit text
+            // Extract the text from EditText
             String userName = userNameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
             String confirmPassword = confirmPasswordEditText.getText().toString();
             String displayName = displayNameEditText.getText().toString();
-            Uri profileImage=null;
-            //profileImageImageView.setImageURI(profileImage);
 
+            Bitmap profileImageBitmap = Bitmap.createBitmap(profileImageImageView.getWidth(), profileImageImageView.getHeight(), Bitmap.Config.ARGB_8888);
+
+            // Step 2: Create a Canvas and associate it with the Bitmap
+            Canvas canvas = new Canvas(profileImageBitmap);
+
+            // Step 3: Draw the ImageView onto the Canvas, which will render it onto the Bitmap
+            profileImageImageView.draw(canvas);
 
 
             if (!isValidPassword(password)) { //Checks if the password criteria are met
                 showInvalidPasswordDialog();
             } else {
-                if (password.equals(confirmPassword)) { //Checks if the password and confirm password fields are same
-                    int isSuccess = addUserToArray(userName, password, displayName, profileImage); //if user add successfully to users array ,isSuccess equals 1
+                if (password.equals(confirmPassword)) { //Checks if the password and confirm password fields
+                    int isSuccess = addUserToArray(userName, password, displayName, profileImageBitmap);  //if user add successfully to users array ,isSuccess equals 1
                     if (isSuccess == 1) {
-                        Toast.makeText(this, "registration made successfully", Toast.LENGTH_SHORT).show();
-                        /*Intent moveToLogin = new Intent(this, LoginScreen.class);
-                        startActivity(moveToLogin);*///this lines suppose to move user to login cut there has a problem
-                        //,when user register an immediately after that try to login its not working.
+                        Toast.makeText(this, "Registration made successfully", Toast.LENGTH_SHORT).show();
+                         Intent moveToLogin = new Intent(this, LoginScreen.class);
+                         startActivity(moveToLogin);///this lines suppose to move user to login cut there has a problem
+                        //,when user try to login immediately after he registered its not working.
                     }
-                }else {
-                    Toast.makeText(this, "confirm password don't match to password", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Confirm password doesn't match the password", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
     }
 
-
     /*
-     * this method check if user's input password meets the criteria.
-     */
+    * this method check if user's input password meets the criteria.
+    */
     public boolean isValidPassword(String password) {
         if (password.length() < 8) return false;
 
@@ -104,10 +107,7 @@ public class RegisterScreen extends AppCompatActivity {
         return hasUppercase && hasLowercase && hasDigit;
     }
 
-    /**
-     *
-     * this method alert when user press invalid password.
-     */
+    // Method to show alert for invalid password
     private void showInvalidPasswordDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Invalid Password")
@@ -116,31 +116,53 @@ public class RegisterScreen extends AppCompatActivity {
                 .show();
     }
 
-    /*
-    * this method display the image who chosen from gallery in imageView
-    * */
+    // Method to display image picker dialog
+    private void showImagePickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Image")
+                .setItems(new String[]{"Camera", "Gallery"}, (dialog, which) -> {
+                    switch (which) {
+                        case 0: // Camera
+                            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(cameraIntent, CAPTURE_IMAGE_REQUEST);
+                            break;
+                        case 1: // Gallery
+                            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
+                            break;
+                    }
+                })
+                .show();
+    }
+
+    // Method to display the selected image in ImageView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && data != null){
+        if (resultCode == RESULT_OK && data != null) {
             Uri profileImage = data.getData();
             ImageView imageView = findViewById(R.id.profileImageView);
-            imageView.setImageURI(profileImage);
 
+            if (requestCode == PICK_IMAGE_REQUEST) {  //if selected image is from gallery
+                imageView.setImageURI(profileImage);
+            } else if (requestCode == CAPTURE_IMAGE_REQUEST) { //if selected image is from camera
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    imageView.setImageBitmap(imageBitmap);
+                }
+            }
         }
     }
 
-
-    /**
-     * this method add the user that register into users list.
-     */
-    private int addUserToArray(String userName, String password, String displayName, Uri profileImage) {
-        if(userName.isEmpty() || password.isEmpty() || displayName.isEmpty()) {
+    // Method to add the user that registers into the users list
+    private int addUserToArray(String userName, String password, String displayName, Bitmap profileImageBitmap) {
+        if (userName.isEmpty() || password.isEmpty() || displayName.isEmpty()) {
             Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
             return 0;
-        }else{
-            User user = new User(userName,password,displayName, profileImage);
-            UserRepository.getInstance().addUser(user); //add user to users List
+        } else {
+            User user = new User(userName, password, displayName, profileImageBitmap);
+            UserRepository.getInstance().addUser(user); // Add user to users List
             return 1;
         }
     }
