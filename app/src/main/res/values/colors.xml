@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="login_btnColor">#FF0000</color>
+    <color name="register_titleColor">#FF0000</color>
+    <color name="register_crAcBtnColor">#5dbac3</color>
+    <color name="register_notResMsgCol">#871136</color>
+    <color name="ad_new_vid_chooseBtnCol">#FF0000</color>
+    <color name="ad_new_vid_chooseImgVidBtnCol">#FF0000</color>
+    <color name="ad_new_vid_uploadBtnCol">#0000FF</color>
+    <color name="ad_new_vid_changeVideoCol">#ff7a1d</color>
+    <color name="ad_new_vid_changeImgVideoCol">#ff7a1d</color>
 </resources>

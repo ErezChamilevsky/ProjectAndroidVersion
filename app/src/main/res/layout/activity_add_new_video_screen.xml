@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddNewVideoScreen">
+
+
+    <VideoView
+        android:id="@+id/addVideoView"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        app:layout_constraintBottom_toBottomOf="@+id/uploadVideoBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/VideoImageImageView"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        app:layout_constraintBottom_toBottomOf="@+id/uploadVideoBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.477"
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="-32dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="-410dp" />
+
+    <Button
+        android:id="@+id/chooseVideoBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ad_new_vid_chooseVidBtn"
+        android:backgroundTint="@color/ad_new_vid_chooseBtnCol"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.184" />
+
+    <Button
+        android:id="@+id/chooseImgVideoBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/ad_new_vid_chooseImgVidBtnCol"
+        android:text="@string/ad_new_vid_chooseVidImgBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/uploadVideoBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/VideoImageImageView"
+        app:layout_constraintTop_toTopOf="@+id/addVideoView"
+        app:layout_constraintVertical_bias="0.483" />
+
+    <Button
+        android:id="@+id/changeImgVideoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ad_new_vid_changeImgVideoBtn"
+        android:backgroundTint="@color/ad_new_vid_changeImgVideoCol"
+        app:layout_constraintBottom_toBottomOf="@+id/uploadVideoBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/addVideoView"
+        app:layout_constraintVertical_bias="0.353" />
+
+    <EditText
+        android:id="@+id/newVideoDescription"
+        android:layout_width="match_parent"
+        android:layout_height="161dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/ad_new_vid_descHint"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toBottomOf="@+id/uploadVideoBtn"
+        app:layout_constraintTop_toTopOf="@+id/addVideoView"
+        app:layout_constraintVertical_bias="0.915"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/uploadVideoBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ad_new_vid_uploadVideoBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.994"
+        android:backgroundTint="@color/ad_new_vid_uploadBtnCol"/>
+
+    <Button
+        android:id="@+id/changeVideoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/ad_new_vid_changeVideoCol"
+        android:text="@string/ad_new_vid_changeVideoBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/newVideoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:ems="10"
+        android:hint="@string/ad_new_vid_vidTitle"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/uploadVideoBtn"
+        app:layout_constraintTop_toTopOf="@+id/addVideoView"
+        app:layout_constraintVertical_bias="0.688"
+        tools:layout_editor_absoluteX="0dp" />
+    />
+</androidx.constraintlayout.widget.ConstraintLayout>
