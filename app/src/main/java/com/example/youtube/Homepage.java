@@ -38,7 +38,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
 
 //---------------------
 
-//        init of the user and videos dataBase.
+//      init of the user and videos dataBase.
+
         UserRepository.getInstance().loadUsersFromJson(this, "users.json");
         VideoRepository.getInstance().loadVideosFromJson(this, "videos.json");
 
@@ -49,7 +50,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
         }
 
 
-        UserRepository.getInstance().setLoggedUser(UserRepository.getInstance().findUserById(1));
+//        UserRepository.getInstance().setLoggedUser(UserRepository.getInstance().findUserById(1));
 
 
 //        -----------------------
@@ -72,6 +73,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
             }
         });
 
+        //user button to login page
+        onUserButtonClick();
         searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -119,7 +122,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
             public void onClick(View v) {
                 // Code to execute when the ImageButton is clicked
                 Intent intent = new Intent(Homepage.this, Homepage.class);
-                finish();
+//                finish();
                 startActivity(intent);
             }
         }));
@@ -149,6 +152,13 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
         } else {
             userButton.setImageResource(R.drawable.chadlogo);
         }
+    }
+
+    public void onUserButtonClick(){
+        findViewById(R.id.homepage_user_button).setOnClickListener(v ->{
+            Intent goToLogin = new Intent(this, LoginScreen.class);
+            startActivity(goToLogin);
+        });
     }
 
 

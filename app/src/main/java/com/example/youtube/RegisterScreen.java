@@ -1,5 +1,7 @@
 package com.example.youtube;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -17,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class RegisterScreen extends AppCompatActivity {
 
@@ -161,9 +167,40 @@ public class RegisterScreen extends AppCompatActivity {
             Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
             return 0;
         } else {
-            User user = new User(userName, password, displayName, profileImageBitmap);
+            User user = new User(userName, password, displayName, bitmapToUriConverter(this,profileImageBitmap));
             UserRepository.getInstance().addUser(user); // Add user to users List
             return 1;
         }
     }
+
+    public Uri bitmapToUriConverter(Context context, Bitmap bitmap) {
+        // Get the context's content resolver
+        ContentResolver contentResolver = context.getContentResolver();
+
+        // Define a URI where the image will be stored
+        Uri imageUri = null;
+
+        // Initialize a file to store the bitmap
+        File imageFile = new File(context.getCacheDir(), "imageFileName.jpg");
+
+        try {
+            // Convert bitmap to JPEG format (you can change PNG to JPEG or other formats)
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+
+            // Get the absolute file path
+            String absolutePath = imageFile.getAbsolutePath();
+
+            // Convert file path into Uri
+            imageUri = Uri.parse("file://" + absolutePath);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return imageUri;
+    }
+
 }
