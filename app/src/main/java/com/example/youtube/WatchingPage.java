@@ -128,26 +128,30 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
     // Set up comments section
     private void setupCommentSection() {
         TextView commentsSection = findViewById(R.id.commentsSection);
-        EditText newCommentBox = findViewById(R.id.newCommentBox);
-        Button postCommentButton = findViewById(R.id.commentButton);
-        postCommentButton.setText("Send");
+        if(UserRepository.getInstance().getLoggedUser() != null) {
 
-        commentsSection.setOnClickListener(v -> toggleCommentsSection());
 
-        postCommentButton.setOnClickListener(v -> {
-            String text = newCommentBox.getText().toString();
-            if (!text.isEmpty()) {
-                // Add comment to repository
-                CommentItem comment = new CommentItem(video, text);
-                CommentRepository.getInstance().addComment(comment);
-                this.commentsList.add(comment);
-                // Clear the comment box
-                newCommentBox.setText("");
+            EditText newCommentBox = findViewById(R.id.newCommentBox);
+            Button postCommentButton = findViewById(R.id.commentButton);
+            postCommentButton.setText("Send");
 
-                // Update comments list and notify adapter
-                commentAdapter.notifyDataSetChanged(); // or notifyItemInserted() if you want to animate insertion
-            }
-        });
+            commentsSection.setOnClickListener(v -> toggleCommentsSection());
+
+            postCommentButton.setOnClickListener(v -> {
+                String text = newCommentBox.getText().toString();
+                if (!text.isEmpty()) {
+                    // Add comment to repository
+                    CommentItem comment = new CommentItem(video, text);
+                    CommentRepository.getInstance().addComment(comment);
+                    this.commentsList.add(comment);
+                    // Clear the comment box
+                    newCommentBox.setText("");
+
+                    // Update comments list and notify adapter
+                    commentAdapter.notifyDataSetChanged(); // or notifyItemInserted() if you want to animate insertion
+                }
+            });
+        }
 
         setCommentsList(); // Initial load
         setupCommentsRecyclerView();

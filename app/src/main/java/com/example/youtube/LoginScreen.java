@@ -50,8 +50,8 @@ public class LoginScreen extends AppCompatActivity {
                 for (int i = 0; i < users.size(); i++){
                     if(userName.equals(users.get(i).getUserName()) && password.equals(users.get(i).getPassword())){
                         UserRepository.getInstance().setLoggedUser(users.get(i)); //set the logged user attribute be the user we found that match.
-                        /*Intent moveToHomeScreen = new Intent(this, //nameOfHomeScreen.class); //need to connect to home page
-                            startActivity(moveToHomeScreen);*/
+                        Intent moveToHomeScreen = new Intent(this, Homepage.class); //need to connect to home page
+                            startActivity(moveToHomeScreen);
                             //break;
                         userExist = 1;
                         Toast.makeText(this, "Login success", Toast.LENGTH_SHORT).show(); //need to delete.

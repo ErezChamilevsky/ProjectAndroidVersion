@@ -17,6 +17,8 @@ public class VideoItemsRecyclerViewAdapter extends RecyclerView.Adapter<VideoIte
     private final RecyclerViewInterface recyclerViewInterface;
 
     ArrayList<VideoItem> videoItemArrayList;
+
+    ArrayList<VideoItem> searchResults;
     Context context;
     public VideoItemsRecyclerViewAdapter(Context context, ArrayList<VideoItem> videoItemArrayList, RecyclerViewInterface recyclerViewInterface){
 
@@ -78,5 +80,20 @@ public class VideoItemsRecyclerViewAdapter extends RecyclerView.Adapter<VideoIte
                 }
             });
         }
+    }
+
+    public void filter(String text) {
+        searchResults.clear();
+        if (text.isEmpty()) {
+            searchResults.addAll(videoItemArrayList);
+        } else {
+            text = text.toLowerCase();
+            for (VideoItem item : videoItemArrayList) {
+                if (item.getItemTitle().toLowerCase().contains(text)) {
+                    searchResults.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

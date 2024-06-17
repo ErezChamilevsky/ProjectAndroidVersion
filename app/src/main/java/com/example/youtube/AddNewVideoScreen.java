@@ -101,9 +101,10 @@ public class AddNewVideoScreen extends AppCompatActivity {
         Video uploadVideo = new Video(userName,userId,this.ImageVideo,this.selectedVideoUri,videoTitle,publicationDate,videoDescription);
         VideoRepository.getInstance().addVideo(uploadVideo); //add video to ArrayList in the Repo.
 
-        Intent moveToLogin = new Intent(this, LoginScreen.class);
-        startActivity(moveToLogin);
+        Intent moveToHomePage = new Intent(this, Homepage.class);
+        startActivity(moveToHomePage);
         Toast.makeText(this, "Video added successfully", Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -169,6 +170,7 @@ public class AddNewVideoScreen extends AppCompatActivity {
 
                 case REQUEST_IMAGE_CAPTURE:  //if image video is from camera
                     ImageView imageView1 = findViewById(R.id.VideoImageImageView);
+                    ImageVideo = data.getData(); // set the imageVideo field
                     Bundle extras = data.getExtras();
                     if (extras != null) {
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -179,7 +181,7 @@ public class AddNewVideoScreen extends AppCompatActivity {
                     changeImgVideoButton.setVisibility(View.VISIBLE);
                     break;
                 case REQUEST_IMAGE_PICK:   //if image video is from gallery.
-                    ImageVideo = data.getData();
+                    ImageVideo = data.getData(); // set the imageVideo field
                     ImageView imageView2 = findViewById(R.id.VideoImageImageView);
                     imageView2.setImageURI(ImageVideo);
                     // Hide the upload button after the image video is selected or captured

@@ -33,6 +33,9 @@ public class VideoRepository {
 
     public void addVideo(Video video) {
         videos.add(video);
+        VideoItem item = new VideoItem(video);
+        item.setUserProfileImage(video.getUserId());
+        videoItemArrayList.add(item);
     }
 
 

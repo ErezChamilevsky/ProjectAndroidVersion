@@ -88,91 +88,78 @@
         android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.975">
-
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/homepage_home_button"
+            android:id="@+id/logOutButton"
             android:layout_width="46dp"
             android:layout_height="44dp"
             android:background="#ffffff"
-            android:contentDescription="Home"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.098"
+            android:contentDescription="Log Out"
+            app:layout_constraintBottom_toTopOf="@id/homepage_home_text"
+            app:layout_constraintEnd_toStartOf="@+id/homepage_add_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.076"
             app:srcCompat="@drawable/homepage_home_icon" />
 
         <TextView
             android:id="@+id/homepage_home_text"
-            android:layout_width="52dp"
-            android:layout_height="16dp"
-            android:contentDescription="Subscriptions"
-            android:text="Home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
             android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/logOutButton"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.101"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.901" />
+            app:layout_constraintStart_toStartOf="@id/logOutButton"
+            app:layout_constraintEnd_toEndOf="@id/logOutButton" />
 
         <ImageButton
-            android:id="@+id/homepage_sub_button"
+            android:id="@+id/homepage_add_button"
             android:layout_width="41dp"
             android:layout_height="46dp"
             android:background="#ffffff"
-            android:contentDescription="user"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="Add"
+            app:layout_constraintBottom_toTopOf="@id/homepage_sub_text"
+            app:layout_constraintEnd_toStartOf="@+id/homepage_user_button"
+            app:layout_constraintStart_toEndOf="@+id/logOutButton"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/homepage_sub_button" />
+            app:srcCompat="@drawable/add"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/homepage_sub_text"
-            android:layout_width="95dp"
-            android:layout_height="19dp"
-            android:text="Subscriptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add"
             android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/homepage_add_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.901" />
-
+            app:layout_constraintStart_toStartOf="@id/homepage_add_button"
+            app:layout_constraintEnd_toEndOf="@id/homepage_add_button" />
 
         <ImageButton
             android:id="@+id/homepage_user_button"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:background="#ffffff"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="User"
+            app:layout_constraintBottom_toTopOf="@id/homepage_user_profile"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.839"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/homepage_add_button"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/chadlogo" />
+            app:srcCompat="@drawable/def"
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/homepage_user_profile"
-            android:layout_width="64dp"
-            android:layout_height="20dp"
-            android:text="User"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
             android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/homepage_user_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.922"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.92" />
+            app:layout_constraintStart_toStartOf="@id/homepage_user_button"
+            app:layout_constraintEnd_toEndOf="@id/homepage_user_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -31,6 +31,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
 
     private ArrayList<VideoItem> videoItemArrayList = VideoRepository.getInstance().getVideoItemArrayList();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,24 +40,20 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
 //---------------------
 
 //      init of the user and videos dataBase.
+        if(firstInit.getInstance().isInit() == 0){
 
-        UserRepository.getInstance().loadUsersFromJson(this, "users.json");
-        VideoRepository.getInstance().loadVideosFromJson(this, "videos.json");
+            UserRepository.getInstance().loadUsersFromJson(this, "users.json");
+            VideoRepository.getInstance().loadVideosFromJson(this, "videos.json");
+            for (int i = 0; i < 9; i++) {
+                VideoItem video = new VideoItem(VideoRepository.getInstance().getVideos().get(i));
+                videoItemArrayList.add(video);
+                video.setUserProfileImage(VideoRepository.getInstance().getVideos().get(i).getUserId());
+            }
 
-        for (int i = 0; i < 9; i++) {
-            VideoItem video = new VideoItem(VideoRepository.getInstance().getVideos().get(i));
-            videoItemArrayList.add(video);
-            video.setUserProfileImage(VideoRepository.getInstance().getVideos().get(i).getUserId());
+            firstInit.getInstance().setInited();
+
         }
 
-
-//        UserRepository.getInstance().setLoggedUser(UserRepository.getInstance().findUserById(1));
-
-
-//        -----------------------
-        ImageButton homeButton = findViewById(R.id.homepage_home_button);
-        ImageButton subButton = findViewById(R.id.homepage_sub_button);
-        ImageButton userButton = findViewById(R.id.homepage_user_button);
         ImageButton searchButton = findViewById(R.id.homepage_search_button);
 
         final EditText searchBar = findViewById(R.id.homepage_search_bar);
@@ -75,13 +72,23 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
 
         //user button to login page
         onUserButtonClick();
+        onClickOfLogOut();
+
+
+
+        //updating when ths is new intent only
+        updateUserImage(UserRepository.getInstance().getLoggedUser());
+
+
+        if(UserRepository.getInstance().getLoggedUser() != null){
+            onAddNewVideoClick();
+        }
+
         searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                    performSearch(searchBar.getText().toString());
 
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String txt = searchBar.getText().toString();
                     Toast.makeText(getApplicationContext(),txt , Toast.LENGTH_SHORT).show();
                     searchBar.setVisibility(View.GONE);
@@ -97,36 +104,9 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
         //recycleview starts
 
         recyclerView = findViewById(R.id.homepage_otherVideosLibrary);
-//        for (int i = 0; i < 9; i++) {
-//            VideoItem videoItem = new VideoItem(i,
-//                    Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.chadlogo),
-//                    "title",
-//                    Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.chadlogo),
-//                    "Erez", "20.20.2020",
-//                    32);
-//
-//            this.videoItemArrayList.add(videoItem);
-//        }
         VideoItemsRecyclerViewAdapter adapter = new VideoItemsRecyclerViewAdapter(this, this.videoItemArrayList, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //recycleview ends
-
-        // Reference the button
-
-        // Set a click listener on the button
-
-        homeButton.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Code to execute when the ImageButton is clicked
-                Intent intent = new Intent(Homepage.this, Homepage.class);
-//                finish();
-                startActivity(intent);
-            }
-        }));
-
     }
 
     private void hideKeyboard(View view) {
@@ -150,7 +130,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
         if (user != null && user.getProfileImage() != null) {
             userButton.setImageURI(user.getProfileImage());
         } else {
-            userButton.setImageResource(R.drawable.chadlogo);
+            userButton.setImageResource(R.drawable.def);
         }
     }
 
@@ -158,6 +138,21 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
         findViewById(R.id.homepage_user_button).setOnClickListener(v ->{
             Intent goToLogin = new Intent(this, LoginScreen.class);
             startActivity(goToLogin);
+        });
+    }
+
+    public void onAddNewVideoClick(){
+        findViewById(R.id.homepage_add_button).setOnClickListener(v ->{
+            Intent goToLogin = new Intent(this, AddNewVideoScreen.class);
+            startActivity(goToLogin);
+        });
+    }
+
+    public void onClickOfLogOut(){
+        findViewById(R.id.logOutButton).setOnClickListener(v ->{
+            UserRepository.getInstance().setLoggedUser(null);
+            Intent stayInHomePage = new Intent(this, Homepage.class);
+            startActivity(stayInHomePage);
         });
     }
 
