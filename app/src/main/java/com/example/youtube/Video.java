@@ -15,6 +15,7 @@ public class Video {
     private int views;
     private int likes;
 
+    private int likeFlag;
     //constructor.
     public Video(String userName, int userId, Uri img, Uri videoSrc, String title, String publicationDate, String description){
         this.id  = nextId++;
@@ -27,6 +28,7 @@ public class Video {
         this.description = description;
         this.views = 0;
         this.likes = 0;
+        this.likeFlag =0;
     }
 
     public int getId() {
@@ -109,4 +111,26 @@ public class Video {
         this.likes = likes;
     }
 
+    public void likeButtonClicked(){
+        if(this.likeFlag == 0){
+            this.likes++;
+            this.likeFlag = 1;
+        }
+        if(this.likeFlag == -1){
+            this.likes++;
+            this.likeFlag = 0;
+        }
+    }
+
+
+    public void unLikeButtonClicked() {
+        if(this.likeFlag == 1){
+            this.likes--;
+            this.likeFlag = 0;
+        }
+        if(this.likeFlag == 0){
+            this.likes--;
+            this.likeFlag = -1;
+        }
+    }
 }

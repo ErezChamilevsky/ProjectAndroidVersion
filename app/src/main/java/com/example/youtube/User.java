@@ -1,16 +1,16 @@
 package com.example.youtube;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 
 public class User {
-    private static int nextId = 0;// Static variable to keep track of the next ID
-    private int id;
+    private static int nextId = 1;// Static variable to keep track of the next ID
+    private int id = 1;
     private String userName;
     private String password;
     private String displayName;
-    private Bitmap profileImage;
+    private Uri profileImage;
 
-    public User(String userName, String password, String displayName, Bitmap profileImage){
+    public User(String userName, String password, String displayName, Uri profileImage){
         this.id = nextId++; // Assign the next ID and then increment it
         this.userName = userName;
         this.password = password;
@@ -34,7 +34,7 @@ public class User {
         return displayName;
     }
 
-    public Bitmap getProfileImage() {
+    public Uri getProfileImage() {
         return profileImage;
     }
 
@@ -54,7 +54,7 @@ public class User {
         this.displayName = displayName;
     }
 
-    public void setProfileImage(Bitmap profileImage) {
+    public void setProfileImage(Uri profileImage) {
         this.profileImage = profileImage;
     }
 }
