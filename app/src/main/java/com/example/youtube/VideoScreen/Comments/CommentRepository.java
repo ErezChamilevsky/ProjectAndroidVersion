@@ -42,4 +42,15 @@ public class CommentRepository {
         }
         return null;
     }
+
+    public void editComment(int commentId, String text){
+        this.findCommentByCommentId(commentId).setText(text);
+    }
+
+    public void deleteComment(int commendId){
+        this.comments.remove(findCommentByCommentId(commendId));
+        notifyAll();
+    }
+
+
 }

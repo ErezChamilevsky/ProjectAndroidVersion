@@ -1,6 +1,7 @@
 package com.example.youtube.VideoScreen.Comments;
 
 import android.net.Uri;
+import android.widget.Button;
 
 import com.example.youtube.R;
 import com.example.youtube.User;
@@ -19,8 +20,8 @@ public class CommentItem {
     Uri profileImage;
 
 
-    public CommentItem(Video video, String text){
-        this.commentId  = nextId++;
+    public CommentItem(Video video, String text) {
+        this.commentId = nextId++;
         this.videoId = video.getId();
         this.text = text;
         this.userId = UserRepository.getInstance().getLoggedUser().getId();
@@ -35,40 +36,24 @@ public class CommentItem {
         this.text = text;
     }
 
-    public int getCommentId(){
+    public int getCommentId() {
         return this.commentId;
     }
-public int getVideoId(){
-        return this.videoId;
-}
 
-public String getUserName(){
+    public int getVideoId() {
+        return this.videoId;
+    }
+
+    public String getUserName() {
         return UserRepository.getInstance().findUserById(this.userId).getDisplayName();
-}
+    }
 
     public Uri getProfileImage() {
         return profileImage;
     }
 
-    // Interface for click events
-    public interface OnCommentItemClickListener {
-        void onDeleteClick(int commentId);
-        // Add more methods as needed, e.g., edit comment, like comment, etc.
-    }
+    public void onRemoveCommentClick() {
 
-    // Instance of the interface
-    private OnCommentItemClickListener listener;
-
-    // Setter for the listener
-    public void setOnCommentItemClickListener(OnCommentItemClickListener listener) {
-        this.listener = listener;
-    }
-
-    // Method to handle delete comment action
-    public void deleteComment() {
-        if (listener != null) {
-            listener.onDeleteClick(commentId);
-        }
     }
 
 
