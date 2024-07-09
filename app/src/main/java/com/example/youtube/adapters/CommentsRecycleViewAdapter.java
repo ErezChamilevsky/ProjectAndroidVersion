@@ -1,7 +1,6 @@
-package com.example.youtube.VideoScreen.Comments;
+package com.example.youtube.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youtube.R;
-import com.example.youtube.VideoAdapter;
-
-import org.w3c.dom.Comment;
+import com.example.youtube.repositories.CommentRepository;
+import com.example.youtube.entities.CommentItem;
 
 import java.util.ArrayList;
 

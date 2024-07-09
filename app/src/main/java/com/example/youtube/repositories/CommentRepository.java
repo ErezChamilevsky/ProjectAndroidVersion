@@ -1,4 +1,6 @@
-package com.example.youtube.VideoScreen.Comments;
+package com.example.youtube.repositories;
+
+import com.example.youtube.entities.CommentItem;
 
 import java.util.ArrayList;
 import java.util.List;

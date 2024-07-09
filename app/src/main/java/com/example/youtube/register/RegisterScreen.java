@@ -1,4 +1,4 @@
-package com.example.youtube;
+package com.example.youtube.register;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -19,6 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.youtube.login.LoginScreen;
+import com.example.youtube.R;
+import com.example.youtube.entities.User;
+import com.example.youtube.repositories.UserRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
