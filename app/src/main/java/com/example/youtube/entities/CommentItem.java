@@ -1,12 +1,8 @@
-package com.example.youtube.VideoScreen.Comments;
+package com.example.youtube.entities;
 
 import android.net.Uri;
-import android.widget.Button;
 
-import com.example.youtube.R;
-import com.example.youtube.User;
-import com.example.youtube.UserRepository;
-import com.example.youtube.Video;
+import com.example.youtube.repositories.UserRepository;
 
 public class CommentItem {
 

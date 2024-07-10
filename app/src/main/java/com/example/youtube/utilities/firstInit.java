@@ -1,6 +1,6 @@
 //this is just for first init of te users and videos from json.
 //-----------------------------------------------------------
-package com.example.youtube;
+package com.example.youtube.utilities;
 
 public class firstInit {
 

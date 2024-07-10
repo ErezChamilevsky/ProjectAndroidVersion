@@ -13,22 +13,22 @@
         android:theme="@style/Theme.Youtube"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterScreen"
+            android:name=".register.RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".LoginScreen"
+            android:name=".login.LoginScreen"
             android:exported="false" />
         <activity
-            android:name=".VideoItem"
+            android:name=".utilities.VideoItem"
             android:exported="false" />
         <activity
-            android:name=".WatchingPage"
+            android:name=".watchingPage.WatchingPage"
             android:exported="false" />
         <activity
-            android:name=".AddNewVideoScreen"
+            android:name=".addNewVideoScreen.AddNewVideoScreen"
             android:exported="false" />
         <activity
-            android:name=".Homepage"
+            android:name=".homePage.Homepage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

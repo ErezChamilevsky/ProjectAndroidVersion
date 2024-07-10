@@ -1,4 +1,4 @@
-package com.example.youtube;
+package com.example.youtube.addNewVideoScreen;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.youtube.homePage.Homepage;
+import com.example.youtube.R;
+import com.example.youtube.entities.Video;
+import com.example.youtube.repositories.UserRepository;
+import com.example.youtube.repositories.VideoRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -1,6 +1,4 @@
-package com.example.youtube;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+package com.example.youtube.homePage;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
@@ -8,12 +6,9 @@ import android.widget.EditText;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +16,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youtube.R;
-import com.example.youtube.VideoScreen.Comments.CommentItem;
-import com.example.youtube.VideoScreen.Comments.CommentRepository;
+import com.example.youtube.adapters.VideoItemsRecyclerViewAdapter;
+import com.example.youtube.addNewVideoScreen.AddNewVideoScreen;
+import com.example.youtube.entities.User;
+import com.example.youtube.login.LoginScreen;
+import com.example.youtube.repositories.UserRepository;
+import com.example.youtube.repositories.VideoRepository;
+import com.example.youtube.utilities.RecyclerViewInterface;
+import com.example.youtube.utilities.VideoItem;
+import com.example.youtube.utilities.firstInit;
+import com.example.youtube.watchingPage.WatchingPage;
 
 import java.util.ArrayList;
 
