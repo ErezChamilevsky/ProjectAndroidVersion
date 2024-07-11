@@ -6,14 +6,14 @@ public class User {
     private static int nextId = 1;// Static variable to keep track of the next ID
     private int userId = 1;
     private String userName;
-    private String password;
+    private String userPassword;
     private String displayName;
     private Uri userImgFile;
 
     public User(String userName, String password, String displayName, Uri profileImage){
         this.userId = nextId++; // Assign the next ID and then increment it
         this.userName = userName;
-        this.password = password;
+        this.userPassword = password;
         this.displayName = displayName;
         this.userImgFile = profileImage;
     }
@@ -27,7 +27,7 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return userPassword;
     }
 
     public String getDisplayName() {
@@ -47,7 +47,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.userPassword = password;
     }
 
     public void setDisplayName(String displayName) {

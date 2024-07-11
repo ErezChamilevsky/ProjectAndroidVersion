@@ -88,7 +88,7 @@ public class AddNewVideoScreen extends AppCompatActivity {
         String videoTitle = videoTitleEditText.getText().toString();
         String videoDescription = videoDescriptionEditText.getText().toString();
         String publicationDate = null;
-        String userName = UserRepository.getInstance().getLoggedUser().getUserName();
+        String displayName = UserRepository.getInstance().getLoggedUser().getDisplayName();
         int userId = UserRepository.getInstance().getLoggedUser().getId();
 
         //set The time now to publication Date
@@ -104,7 +104,7 @@ public class AddNewVideoScreen extends AppCompatActivity {
             publicationDate = dtf.format(now);
         }
 
-        Video uploadVideo = new Video(userName,userId,this.ImageVideo,this.selectedVideoUri,videoTitle,publicationDate,videoDescription);
+        Video uploadVideo = new Video(displayName,userId,this.ImageVideo,this.selectedVideoUri,videoTitle,publicationDate,videoDescription);
         VideoRepository.getInstance().addVideo(uploadVideo); //add video to ArrayList in the Repo.
 
         Intent moveToHomePage = new Intent(this, Homepage.class);
