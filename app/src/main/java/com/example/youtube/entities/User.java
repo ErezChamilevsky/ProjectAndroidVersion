@@ -4,22 +4,22 @@ import android.net.Uri;
 
 public class User {
     private static int nextId = 1;// Static variable to keep track of the next ID
-    private int id = 1;
+    private int userId = 1;
     private String userName;
     private String password;
     private String displayName;
-    private Uri profileImage;
+    private Uri userImgFile;
 
     public User(String userName, String password, String displayName, Uri profileImage){
-        this.id = nextId++; // Assign the next ID and then increment it
+        this.userId = nextId++; // Assign the next ID and then increment it
         this.userName = userName;
         this.password = password;
         this.displayName = displayName;
-        this.profileImage = profileImage;
+        this.userImgFile = profileImage;
     }
 
     public int getId() {
-        return id;
+        return userId;
     }
 
     public String getUserName() {
@@ -35,11 +35,11 @@ public class User {
     }
 
     public Uri getProfileImage() {
-        return profileImage;
+        return userImgFile;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.userId = id;
     }
 
     public void setUserName(String userName) {
@@ -55,6 +55,6 @@ public class User {
     }
 
     public void setProfileImage(Uri profileImage) {
-        this.profileImage = profileImage;
+        this.userImgFile = profileImage;
     }
 }
