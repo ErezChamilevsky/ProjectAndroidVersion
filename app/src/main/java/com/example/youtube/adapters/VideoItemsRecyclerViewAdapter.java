@@ -44,8 +44,8 @@ public class VideoItemsRecyclerViewAdapter extends RecyclerView.Adapter<VideoIte
     @Override
     public void onBindViewHolder(@NonNull VideoItemsRecyclerViewAdapter.MyViewHolder holder, int position) {
         holder.videoTitle.setText(videoItemArrayList.get(position).getItemTitle());
-        holder.videoDetails.setText(videoItemArrayList.get(position).getUploaderName() + " • " + videoItemArrayList.get(position).getViews() + "views • " + videoItemArrayList.get(position).getUploadDate());
-        holder.videoDetails.setText(videoItemArrayList.get(position).getUploaderName());
+        holder.videoDescription.setText(videoItemArrayList.get(position).getUploaderName() + " • " + videoItemArrayList.get(position).getViews() + "views • " + videoItemArrayList.get(position).getUploadDate());
+        holder.videoDescription.setText(videoItemArrayList.get(position).getUploaderName());
         holder.avatar.setImageURI(videoItemArrayList.get(position).getAvatar());
         holder.thumbnail.setImageURI(videoItemArrayList.get(position).getThumbnail());
     }
@@ -62,7 +62,7 @@ public class VideoItemsRecyclerViewAdapter extends RecyclerView.Adapter<VideoIte
         ImageView avatar;
 
         TextView videoTitle;
-        TextView videoDetails;
+        TextView videoDescription;
 
         public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
@@ -70,7 +70,7 @@ public class VideoItemsRecyclerViewAdapter extends RecyclerView.Adapter<VideoIte
             thumbnail = itemView.findViewById(R.id.videoThumbnail);
             avatar = itemView.findViewById(R.id.uploaderAvatar);
             videoTitle = itemView.findViewById(R.id.videoTitle);
-            videoDetails = itemView.findViewById(R.id.videoDetails);
+            videoDescription = itemView.findViewById(R.id.videoDetails);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

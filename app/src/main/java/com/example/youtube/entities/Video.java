@@ -5,7 +5,7 @@ import android.net.Uri;
 public class Video {
     private static int nextId = 0;// Static variable to keep track of the next ID
     private int id;
-    private String userName;
+    private String displayName;
     private int userId;
     private Uri img;
     private Uri videoSrc;
@@ -19,7 +19,7 @@ public class Video {
     //constructor.
     public Video(String userName, int userId, Uri img, Uri videoSrc, String title, String publicationDate, String description){
         this.id  = nextId++;
-        this.userName = userName;
+        this.displayName = userName;
         this.userId = userId;
         this.img = img;
         this.videoSrc = videoSrc;
@@ -40,11 +40,11 @@ public class Video {
     }
 
     public String getUserName() {
-        return userName;
+        return displayName;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.displayName = userName;
     }
 
     public int getUserId() {
