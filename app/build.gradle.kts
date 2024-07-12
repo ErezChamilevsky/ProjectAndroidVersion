@@ -33,11 +33,16 @@ android {
 
 dependencies {
 
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.5.0")
+    implementation ("com.google.code.gson:gson:2.8.7")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
-    implementation ("com.google.code.gson:gson:2.8.7")
     implementation(libs.constraintlayout)
+    implementation(libs.ui.graphics.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
