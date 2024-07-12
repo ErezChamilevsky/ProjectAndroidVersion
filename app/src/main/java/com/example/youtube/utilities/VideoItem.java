@@ -76,7 +76,7 @@ public class VideoItem extends AppCompatActivity {
         if(user == null){
             this.avatar = Uri.parse("android.resource://" + getPackageName() + "/" + R.drawable.def);
         } else {
-            this.avatar = user.getProfileImage();
+            this.avatar = Uri.parse(user.getUserImgFile());
         }
     }
 

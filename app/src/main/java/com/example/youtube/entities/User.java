@@ -4,57 +4,73 @@ import android.net.Uri;
 
 public class User {
     private static int nextId = 1;// Static variable to keep track of the next ID
-    private int id = 1;
+    private String _id;
+    private int userId = 1;
     private String userName;
-    private String password;
-    private String displayName;
-    private Uri profileImage;
+    private String userPassword;
 
-    public User(String userName, String password, String displayName, Uri profileImage){
-        this.id = nextId++; // Assign the next ID and then increment it
+    private String userConfirmPassword;
+
+    private String displayName;
+    private String userImgFile;
+
+
+
+    public User(String userName, String userPassword,String userConfirmPassword ,String displayName, String userImgFile){
+        this._id = null;
+        this.userId = nextId++; // Assign the next ID and then increment it
         this.userName = userName;
-        this.password = password;
+        this.userPassword = userPassword;
+        this.userConfirmPassword = userConfirmPassword;
         this.displayName = displayName;
-        this.profileImage = profileImage;
+        this.userImgFile = userImgFile;
+
     }
 
     public int getId() {
-        return id;
+        return userId;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserPassword() {
+        return userPassword;
     }
 
     public String getDisplayName() {
         return displayName;
     }
-
-    public Uri getProfileImage() {
-        return profileImage;
+    public String getUserConfirmPassword() {
+        return userConfirmPassword;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserConfirmPassword(String userConfirmPassword) {
+        this.userConfirmPassword = userConfirmPassword;
+    }
+
+    public String getUserImgFile() {
+        return userImgFile;
+    }
+
+    public void setId(int userId) {
+        this.userId = userId;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
-    public void setProfileImage(Uri profileImage) {
-        this.profileImage = profileImage;
+    public void setUserImgFile(String userImgFile) {
+        this.userImgFile = userImgFile;
     }
 }
