@@ -7,20 +7,32 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.youtube.api.UserAPI;
 import com.example.youtube.homePage.Homepage;
 import com.example.youtube.R;
 import com.example.youtube.entities.User;
 import com.example.youtube.register.RegisterScreen;
 import com.example.youtube.repositories.UserRepository;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginScreen extends AppCompatActivity {
+    public static String token = ""; //token static variable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,25 +60,86 @@ public class LoginScreen extends AppCompatActivity {
 
                 //extract the text from Edit text.
                 String userName = userNameEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+                String userPassword = passwordEditText.getText().toString();
 
-                int userExist = 0;
-                List<User> users = UserRepository.getInstance().getUsers(); //get the users array.
-                // iterate the List and check if user details actually exist
-                for (int i = 0; i < users.size(); i++){
-                    if(userName.equals(users.get(i).getUserName()) && password.equals(users.get(i).getPassword())){
-                        UserRepository.getInstance().setLoggedUser(users.get(i)); //set the logged user attribute be the user we found that match.
-                        Intent moveToHomeScreen = new Intent(this, Homepage.class); //need to connect to home page
-                            startActivity(moveToHomeScreen);
-                            //break;
-                        userExist = 1;
-                        Toast.makeText(this, "Login success", Toast.LENGTH_SHORT).show(); //need to delete.
+
+
+
+                //send request to server to Login.
+                UserAPI loginUsersApi = new UserAPI();
+                User loginUser = new User(userName, userPassword, null,null,null);
+
+                //this request check if user exist in MongoDB and return token (if exist)
+                loginUsersApi.loginServer(loginUser,new Callback<ResponseBody>() {
+
+                    @Override
+                    public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                        try {
+                            if (response.isSuccessful()) {
+                                String status = String.valueOf(response.code());
+                                String responseBody = response.body().string();
+                                JSONObject jsonResponse = new JSONObject(responseBody);
+                                LoginScreen.token = jsonResponse.getString("token"); //extract token from server response.
+
+                                if (status.equals("200")) { //if server return a token.
+
+                                    //this request is for get the details from server of user that login right now.
+                                    loginUsersApi.getUserDetails("Bearer " + LoginScreen.token, userName, new Callback<User>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                                            if (response.isSuccessful()) {
+                                                User loginUser = response.body();
+                                                UserRepository.getInstance().setLoggedUser(loginUser); // set the logged user that return from server
+                                                // Login successful (status code 200)
+                                                Intent moveToHomeScreen = new Intent(LoginScreen.this, Homepage.class); //move to HomePage
+                                                startActivity(moveToHomeScreen);
+
+
+                                                //here we define the user ROOM
+//                                            appDB = Room.databaseBuilder(getApplicationContext(), AppDB.class, "facebookDB")
+//                                                    .allowMainThreadQueries()
+//                                                    .fallbackToDestructiveMigration()
+//                                                    .build();
+//                                            userDao= appDB.userDao();
+//                                            new Thread(() -> userDao.insert(loginUser)).start();
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
+                                            Toast.makeText(LoginScreen.this, "failed to load the user details", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                } else {
+                                    //if get user details is fail (server sena a error)
+                                    JSONObject jsonObject = new JSONObject(response.errorBody().string());
+                                    String errorMsg = jsonObject.getString("errors"); // extract the error msg from json that server returned us
+                                    runOnUiThread(() -> {
+                                        Toast.makeText(LoginScreen.this, errorMsg, Toast.LENGTH_SHORT).show();
+                                    });
+                                }
+
+                            } else {
+                                //if get user details is fail (server sena a error and not the token)
+                                JSONObject jsonObject = new JSONObject(response.errorBody().string());
+                                String errorMsg = jsonObject.getString("message"); // extract the error msg from json that server returned us
+                                runOnUiThread(() -> {
+                                    Toast.makeText(LoginScreen.this, errorMsg, Toast.LENGTH_SHORT).show();
+                                });
+                            }
+                        } catch(IOException | JSONException e){
+                            e.printStackTrace();
+                        }
                     }
-                }
-                    // if the user don't appear in users at all.
-                    if(userExist == 0) {
-                        Toast.makeText(this, "Username or password are wrong", Toast.LENGTH_SHORT).show();
+
+                    @Override
+                    public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                        Toast.makeText(LoginScreen.this ,"Invalid server call!", Toast.LENGTH_SHORT).show();
                     }
+                });
+
             });
     }
 }
