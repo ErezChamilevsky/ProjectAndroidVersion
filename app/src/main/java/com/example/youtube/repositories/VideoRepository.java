@@ -65,13 +65,13 @@ public class VideoRepository {
 
             for (JsonElement element : jsonArray) {
                 JsonObject obj = element.getAsJsonObject();
-                String userName = obj.get("artist").getAsString();
-                int userId = obj.get("user_id").getAsInt();
+                String displayName = obj.get("displayName").getAsString();
+                int userId = obj.get("userId").getAsInt();
                 String img = obj.get("img").getAsString();
-                String videoSrc = obj.get("video_src").getAsString();
+                String videoSrc = obj.get("videoSrc").getAsString();
                 String title = obj.get("title").getAsString();
-                String publicationDate = obj.get("publication_date").getAsString();
-                String description = obj.get("details").getAsString();
+                String publicationDate = obj.get("publicationDate").getAsString();
+                String description = obj.get("description").getAsString();
 
                 // Get the drawable resource ID from the img string
                 int imgResId = context.getResources().getIdentifier(img, "drawable", context.getPackageName());
@@ -81,7 +81,7 @@ public class VideoRepository {
                     continue;
                 }
 
-                Video video = new Video(userName,
+                Video video = new Video(displayName,
                         userId,
                         Uri.parse("android.resource://" + context.getPackageName() + "/" + imgResId),
                         Uri.parse("android.resource://" + context.getPackageName() + "/" + videoResId),
