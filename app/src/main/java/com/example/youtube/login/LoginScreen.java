@@ -32,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginScreen extends AppCompatActivity {
-    public static String token = ""; //token static variable
+    public static String token = null; //token static variable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
