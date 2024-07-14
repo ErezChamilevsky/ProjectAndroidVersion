@@ -1,4 +1,5 @@
 package com.example.youtube.homePage;
+import android.net.Uri;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
@@ -45,7 +46,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
 //      init of the user and videos dataBase.
         if(firstInit.getInstance().isInit() == 0){
 
-            UserRepository.getInstance().loadUsersFromJson(this, "users.json");
+            //UserRepository.getInstance().loadUsersFromJson(this, "users.json");
             VideoRepository.getInstance().loadVideosFromJson(this, "videos.json");
             for (int i = 0; i < 9; i++) {
                 VideoItem video = new VideoItem(VideoRepository.getInstance().getVideos().get(i));
@@ -130,8 +131,8 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
     public void updateUserImage(User user) {
         ImageButton userButton = findViewById(R.id.homepage_user_button);
 
-        if (user != null && user.getProfileImage() != null) {
-            userButton.setImageURI(user.getProfileImage());
+        if (user != null && user.getUserImgFile() != null) {
+            userButton.setImageURI(Uri.parse(user.getUserImgFile()));
         } else {
             userButton.setImageResource(R.drawable.def);
         }
@@ -154,6 +155,7 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
     public void onClickOfLogOut(){
         findViewById(R.id.logOutButton).setOnClickListener(v ->{
             UserRepository.getInstance().setLoggedUser(null);
+            LoginScreen.token = null;
             Intent stayInHomePage = new Intent(this, Homepage.class);
             startActivity(stayInHomePage);
         });

@@ -21,7 +21,7 @@ public class CommentItem {
         this.videoId = video.getId();
         this.text = text;
         this.userId = UserRepository.getInstance().getLoggedUser().getId();
-        this.profileImage = UserRepository.getInstance().getLoggedUser().getProfileImage();
+        this.profileImage = Uri.parse(UserRepository.getInstance().getLoggedUser().getUserImgFile());
     }
 
     public String getText() {
