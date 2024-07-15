@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,9 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.youtube.R;
 import com.example.youtube.adapters.VideoItemsRecyclerViewAdapter;
-import com.example.youtube.entities.CommentItem;
-import com.example.youtube.repositories.CommentRepository;
-import com.example.youtube.adapters.CommentsRecycleViewAdapter;
 import com.example.youtube.entities.User;
 import com.example.youtube.entities.Video;
 import com.example.youtube.repositories.UserRepository;
@@ -42,9 +38,8 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
     // Data
     private Video video;
     private ArrayList<VideoItem> videoItemArrayList = VideoRepository.getInstance().getVideoItemArrayList();
-    private ArrayList<CommentItem> commentsList;
 
-    private CommentsRecycleViewAdapter commentAdapter;
+    private CommentsManager commentsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +89,6 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
 
     // Setup list of other videos in RecyclerView
     private void setupOtherVideos() {
-//        for (int i = 0; i < 9; i++) {
-//            videoItemArrayList.add(new VideoItem(VideoRepository.getInstance().getVideos().get(i)));
-//        }
-
         recyclerView.setAdapter(new VideoItemsRecyclerViewAdapter(this, videoItemArrayList, this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -113,7 +104,7 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
     // Set up user interactions (like, dislike, comment)
     private void setupUserInteractions() {
         setupLikeDislikeButtons();
-        setupCommentSection();
+        commentsManager = new CommentsManager(this, video, commentsRecyclerView);
     }
 
     // Set up like and dislike buttons
@@ -132,49 +123,6 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
         });
 
         setLikes(video); // Initial setup
-    }
-
-    // Set up comments section
-    private void setupCommentSection() {
-        TextView commentsSection = findViewById(R.id.commentsSection);
-        if(UserRepository.getInstance().getLoggedUser() != null) {
-
-
-            EditText newCommentBox = findViewById(R.id.newCommentBox);
-            Button postCommentButton = findViewById(R.id.commentButton);
-            postCommentButton.setText("Send");
-
-            commentsSection.setOnClickListener(v -> toggleCommentsSection());
-
-            postCommentButton.setOnClickListener(v -> {
-                String text = newCommentBox.getText().toString();
-                if (!text.isEmpty()) {
-                    // Add comment to repository
-                    CommentItem comment = new CommentItem(video, text);
-                    CommentRepository.getInstance().addComment(comment);
-                    this.commentsList.add(comment);
-                    // Clear the comment box
-                    newCommentBox.setText("");
-
-                    // Update comments list and notify adapter
-                    commentAdapter.notifyDataSetChanged(); // or notifyItemInserted() if you want to animate insertion
-                }
-            });
-        }
-
-        setCommentsList(); // Initial load
-        setupCommentsRecyclerView();
-    }
-
-    // Toggle visibility of comments section
-    private void toggleCommentsSection() {
-        View commentsContainer = findViewById(R.id.commentsContainer);
-        commentsContainer.setVisibility(commentsContainer.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-    }
-
-    // Set comments list from repository
-    private void setCommentsList() {
-        commentsList = CommentRepository.getInstance().findCommentByVideoId(video.getId());
     }
 
     // Set video fragment in the activity
@@ -235,12 +183,5 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
         Intent intent = new Intent(WatchingPage.this, WatchingPage.class);
         intent.putExtra("VIDEO_ID", videoItemArrayList.get(position).getId());
         startActivity(intent);
-    }
-
-    private void setupCommentsRecyclerView() {
-        this.commentAdapter = new CommentsRecycleViewAdapter(this, commentsList);
-
-        commentsRecyclerView.setAdapter(commentAdapter);
-        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
