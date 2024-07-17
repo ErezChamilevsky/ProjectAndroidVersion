@@ -12,9 +12,19 @@ in this case please run whole app again and now things are work fine.
 
 
 
-To work in your network please enter to res->values->strings.xml ,and change ths string called "BaseUrl" to your ip adress.
+To work in your network please enter to res->values->strings.xml ,and change ths string called "BaseUrl" ,in the part of ip definition (after "http") ,to your ip address in your network.
+
+**Dont** change the Port number.
 
 Now - load manualy the data to the mongo schemas - to do that - take this file [videos.json](https://github.com/user-attachments/files/16272176/videos.json) and insert to mongo schema tests/videos.
 -- if you check the part 2 (Web) too ,**Dont** use the same videos there to this part!! , ***its not working.***
 
 To run the server open this link https://github.com/ErezChamilevsky/youtubeProjectServer.git , clone, and write in Cmd "npm start".
+
+**So for conclusion follow this order:**
+
+1.load the videos.json to mongo.
+
+2.run the server.
+
+3.run the Android Application.
