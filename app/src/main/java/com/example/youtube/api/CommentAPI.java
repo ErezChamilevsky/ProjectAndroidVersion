@@ -1,14 +1,18 @@
 package com.example.youtube.api;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+
 import com.example.youtube.R;
 import com.example.youtube.ViewModels.MyApplication;
 import com.example.youtube.entities.CommentItem;
-import com.example.youtube.entities.User;
+
 import com.example.youtube.login.LoginScreen;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

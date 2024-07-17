@@ -1,34 +1,48 @@
 package com.example.youtube.entities;
 
+import static android.content.ContentValues.TAG;
+import static com.example.youtube.ViewModels.MyApplication.context;
+
 import android.net.Uri;
+import android.util.Log;
+
+import com.example.youtube.watchingPage.WatchingPage;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Video {
     private static int nextId = 0;// Static variable to keep track of the next ID
     private int id;
     private String displayName;
     private int userId;
-    private Uri img;
-    private Uri videoSrc;
+    private String img; //changing filed to string
+    private String videoSrc; //changing filed to string
     private String title;
     private String publicationDate;
-    private  String description;
     private int views;
+    private  String description;
+
     private int likes;
 
-    private int likeFlag;
+    private static int likeFlag;
     //constructor.
     public Video(String userName, int userId, Uri img, Uri videoSrc, String title, String publicationDate, String description){
         this.id  = nextId++;
         this.displayName = userName;
         this.userId = userId;
-        this.img = img;
-        this.videoSrc = videoSrc;
+        this.img = img.toString(); //changing filed to string, but we want the constructor still be relevant
+        this.videoSrc = videoSrc.toString();
         this.title = title;
         this.publicationDate = publicationDate;
         this.description = description;
         this.views = 0;
         this.likes = 0;
-        this.likeFlag =0;
+        likeFlag =0;
     }
 
     public int getId() {
@@ -55,20 +69,17 @@ public class Video {
         this.userId = userId;
     }
 
-    public Uri getImg() {
-        return img;
+    public Uri getImg() { //convert to uri
+        return Uri.parse("android.resource://" +
+                context.getPackageName() + "/"
+                +context.getResources().getIdentifier(img, "drawable", context.getPackageName()));
     }
 
-    public void setImg(Uri img) {
-        this.img = img;
-    }
+    public Uri getVideoSrc() { //convert to uri
 
-    public Uri getVideoSrc() {
-        return videoSrc;
-    }
-
-    public void setVideoSrc(Uri videoSrc) {
-        this.videoSrc = videoSrc;
+        return Uri.parse("android.resource://" +
+                context.getPackageName() + "/"
+                +context.getResources().getIdentifier(videoSrc, "raw", context.getPackageName()));
     }
 
     public String getTitle() {
@@ -112,25 +123,30 @@ public class Video {
     }
 
     public void likeButtonClicked(){
-        if(this.likeFlag == 0){
+        if(likeFlag == 0){
             this.likes++;
-            this.likeFlag = 1;
+            likeFlag = 1;
         }
-        if(this.likeFlag == -1){
+        if(likeFlag == -1){
             this.likes++;
-            this.likeFlag = 0;
+            likeFlag = 0;
         }
     }
 
 
     public void unLikeButtonClicked() {
-        if(this.likeFlag == 1){
+        if(likeFlag == 1){
             this.likes--;
-            this.likeFlag = 0;
+            likeFlag = 0;
         }
-        if(this.likeFlag == 0){
+        if(likeFlag == 0){
             this.likes--;
-            this.likeFlag = -1;
+            likeFlag = -1;
         }
     }
+
+
+
+
+
 }

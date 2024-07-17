@@ -2,6 +2,9 @@ package com.example.youtube.api;
 
 import com.example.youtube.entities.CommentItem;
 import com.example.youtube.entities.User;
+import com.example.youtube.entities.Video;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 import java.util.Map;
@@ -60,4 +63,11 @@ public interface WebServiceAPI {
     // Fully update a specific comment by comment ID
     @PUT("{pid}/comments/{cid}")
     Call<CommentItem> editCommentByIdPut(@Path("pid") int pid, @Path("cid") int cid, @Body CommentItem comment);
+
+
+    @GET("videos")
+    Call<List<Video>> getVideosToPresent();
+
+    @GET("videos/{pid}")
+    Call<Video> getVideo(@Path("pid") int videoId);
 }

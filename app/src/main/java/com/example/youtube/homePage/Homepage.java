@@ -1,5 +1,6 @@
 package com.example.youtube.homePage;
 import android.net.Uri;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.youtube.R;
 import com.example.youtube.adapters.VideoItemsRecyclerViewAdapter;
 import com.example.youtube.addNewVideoScreen.AddNewVideoScreen;
+import com.example.youtube.api.VideoAPI;
 import com.example.youtube.entities.User;
+import com.example.youtube.entities.Video;
 import com.example.youtube.login.LoginScreen;
 import com.example.youtube.repositories.UserRepository;
 import com.example.youtube.repositories.VideoRepository;
@@ -29,8 +34,14 @@ import com.example.youtube.utilities.firstInit;
 import com.example.youtube.watchingPage.WatchingPage;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Homepage extends AppCompatActivity implements RecyclerViewInterface {
+    private static final String TAG = "Home";
     private RecyclerView recyclerView;
 
     private ArrayList<VideoItem> videoItemArrayList = VideoRepository.getInstance().getVideoItemArrayList();
@@ -44,20 +55,22 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
 //---------------------
 
 //      init of the user and videos dataBase.
-        if(firstInit.getInstance().isInit() == 0){
-
-            //UserRepository.getInstance().loadUsersFromJson(this, "users.json");
-            VideoRepository.getInstance().loadVideosFromJson(this, "videos.json");
-            for (int i = 0; i < 9; i++) {
-                VideoItem video = new VideoItem(VideoRepository.getInstance().getVideos().get(i));
-                videoItemArrayList.add(video);
-                video.setUserProfileImage(VideoRepository.getInstance().getVideos().get(i).getUserId());
-            }
-
-            firstInit.getInstance().setInited();
-
-        }
-
+//        if(firstInit.getInstance().isInit() == 0){
+//
+//            //UserRepository.getInstance().loadUsersFromJson(this, "users.json");
+//            VideoRepository.getInstance().loadVideosFromJson(this, "videos.json");
+//            for (int i = 0; i < 9; i++) {
+//                VideoItem video = new VideoItem(VideoRepository.getInstance().getVideos().get(i));
+//                videoItemArrayList.add(video);
+//                video.setUserProfileImage(VideoRepository.getInstance().getVideos().get(i).getUserId());
+//            }
+//
+//            firstInit.getInstance().setInited();
+//
+//        }
+        getVideosListFromServer();
+    }
+    public void settingThingsUp(){
         ImageButton searchButton = findViewById(R.id.homepage_search_button);
 
         final EditText searchBar = findViewById(R.id.homepage_search_bar);
@@ -161,5 +174,43 @@ public class Homepage extends AppCompatActivity implements RecyclerViewInterface
         });
     }
 
+
+    void getVideosListFromServer() {
+
+        VideoAPI videoAPI = new VideoAPI();
+        videoAPI.getVideosToPresent(new Callback<List<Video>>() {
+
+            @Override
+            public void onResponse(@NonNull Call<List<Video>> call, @NonNull Response<List<Video>> response) {
+                Log.d(TAG, "List Response");
+                handleResponse(call, response);
+                settingThingsUp();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Video>> call, Throwable t) {
+                Log.d(TAG, "List fail");
+                handleFailure(t);
+            }
+        });
+
+    }
+
+    private void handleResponse(Call<List<Video>> call, Response<List<Video>> response) {
+        if (response.isSuccessful()) {
+            List<Video> videos = response.body();
+            VideoRepository.getInstance().addVideos(videos);
+            Log.d(TAG, "Init Success: " + videos);
+        } else {
+            Log.d(TAG, "List Response Code: " + response.code());
+            Log.d(TAG, "List Response Message: " + response.message());
+        }
+    }
+
+    private void handleFailure(Throwable t) {
+        Log.e(TAG, "List Request Failed: " + t.getMessage());
+
+    }
 
 }
