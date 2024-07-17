@@ -2,12 +2,42 @@ package com.example.youtube.entities;
 
 import android.net.Uri;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Video {
     private static int nextId = 0;// Static variable to keep track of the next ID
+    @PrimaryKey
     private int id;
     private String displayName;
     private int userId;
     private Uri img;
+
+    public static int getNextId() {
+        return nextId;
+    }
+
+    public static void setNextId(int nextId) {
+        Video.nextId = nextId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public int getLikeFlag() {
+        return likeFlag;
+    }
+
+    public void setLikeFlag(int likeFlag) {
+        this.likeFlag = likeFlag;
+    }
+
     private Uri videoSrc;
     private String title;
     private String publicationDate;
@@ -17,9 +47,9 @@ public class Video {
 
     private int likeFlag;
     //constructor.
-    public Video(String userName, int userId, Uri img, Uri videoSrc, String title, String publicationDate, String description){
+    public Video(String displayName, int userId, Uri img, Uri videoSrc, String title, String publicationDate, String description){
         this.id  = nextId++;
-        this.displayName = userName;
+        this.displayName = displayName;
         this.userId = userId;
         this.img = img;
         this.videoSrc = videoSrc;
