@@ -70,4 +70,12 @@ public interface WebServiceAPI {
 
     @GET("videos/{pid}")
     Call<Video> getVideo(@Path("pid") int videoId);
+
+    @GET("videos/users/{id}")
+    Call<User> getUserDetailsForVideoPage(@Path("id") int id);
+
+    @GET("videos/users/{id}/uploads")
+    Call<List<Video>> getVideoListByUserId(@Path("id") int id);
+
+
 }

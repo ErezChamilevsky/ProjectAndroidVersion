@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.example.youtube.entities.User;
 import com.example.youtube.entities.Video;
 import com.example.youtube.repositories.UserRepository;
 import com.example.youtube.repositories.VideoRepository;
+import com.example.youtube.userPage.UserVideosPage;
 import com.example.youtube.utilities.RecyclerViewInterface;
 import com.example.youtube.utilities.VideoItem;
 import java.util.ArrayList;
@@ -122,6 +124,7 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
             public void onResponse(@NonNull Call<List<Video>> call, @NonNull Response<List<Video>> response) {
                 Log.d(TAG, "List Response");
                 handleResponse(call, response);
+                getUserFromServer();
                 initializeRecyclerViews();
                 setupOtherVideos();
                 setupVideoFragment();
@@ -186,7 +189,6 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
         VideoDisplay fragment = VideoDisplay.newInstance(video.getVideoSrc().toString(), null);
         setVideoFragment(fragment);
         setVideoInPage(video);
-        setUserCard(video);
     }
 
     // Set up user interactions (like, dislike, comment)
@@ -255,16 +257,66 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
     }
 
     // Set user card (uploader details) in the UI
-    private void setUserCard(Video video) {
+    private void setUserCard(User user) {
         TextView uploaderName = findViewById(R.id.uploaderName);
         ImageView uploaderAvatar = findViewById(R.id.uploaderAvatar);
 
-        User user = UserRepository.getInstance().findUserById(video.getUserId());
         if (user != null) {
             uploaderName.setText(user.getDisplayName());
             uploaderAvatar.setImageURI(Uri.parse(user.getUserImgFile()));
+
+            View.OnClickListener clickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(WatchingPage.this, UserVideosPage.class);
+                    intent.putExtra("USER_ID", user.getId());
+                    startActivity(intent);
+                }
+            };
+
+            uploaderName.setOnClickListener(clickListener);
+            uploaderAvatar.setOnClickListener(clickListener);
         }
     }
+
+    void getUserFromServer() {
+
+        VideoAPI videoAPI = new VideoAPI();
+        videoAPI.getUserDetailsForVideoPage(video.getUserId(), new Callback<User>() {
+
+            @Override
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                Log.d(TAG, "user Response");
+                handleUserResponse(call, response);
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d(TAG, "user fail");
+                handleUserFailure(t);
+            }
+        });
+
+    }
+
+    private void handleUserResponse(Call<User> call, Response<User> response) {
+        if (response.isSuccessful()) {
+            User user = response.body();
+            setUserCard(user);
+
+            Log.d(TAG, "user Success: " + user);
+        } else {
+            Log.d(TAG, "user Response Code: " + response.code());
+            Log.d(TAG, "user Response Message: " + response.message());
+        }
+    }
+
+    private void handleUserFailure(Throwable t) {
+        Log.e(TAG, "user Request Failed: " + t.getMessage());
+
+    }
+
 
     @Override
     public void onItemClick(int position) {

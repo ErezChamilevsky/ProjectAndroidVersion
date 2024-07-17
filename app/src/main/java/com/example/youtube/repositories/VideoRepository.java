@@ -128,10 +128,12 @@ public class VideoRepository {
     public void addItemToVideoItemArrayList(VideoItem videoItem){
         this.videoItemArrayList.add(videoItem);
     }
-    public void addVideoListToItemList(List<Video> videos){ // in use in watching page. but for now in comment
+    public List<VideoItem> addVideoListToItemList(List<Video> videos){ // in use in watching page. but for now in comment
+        List<VideoItem> videosItems = new ArrayList<>();
         for(Video video : videos){
-            videoItemArrayList.add(new VideoItem(video));
+            videosItems.add(new VideoItem(video));
         }
+        return videosItems;
     }
 
 

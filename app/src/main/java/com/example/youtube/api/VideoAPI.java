@@ -48,5 +48,16 @@ public class VideoAPI {
         // the onResponse and onFailure is in the corresponding screen file
     }
 
+    public void getUserDetailsForVideoPage(int userId,Callback<User> callback ){
+        Call<User> call = webServiceAPI.getUserDetailsForVideoPage(userId);
+        call.enqueue(callback);
+    }
+
+    public void getVideoListByUserId(int userId, Callback<List<Video>>callback) {
+        Call<List<Video>> call = webServiceAPI.getVideoListByUserId(userId);
+        call.enqueue(callback);
+        // the onResponse and onFailure is in the corresponding screen file
+    }
+
 }
 //tODO where to put the functions to request and etc.
