@@ -19,4 +19,5 @@
     <string name="ad_new_vid_changeVideoBtn">Change Video</string>
     <string name="ad_new_vid_chooseVidImgBtn">For choosing video image press here</string>
     <string name="ad_new_vid_changeImgVideoBtn">change Img Video</string>
+    <string name="BaseUrl">http://192.168.33.13:12345/api/</string>
 </resources>

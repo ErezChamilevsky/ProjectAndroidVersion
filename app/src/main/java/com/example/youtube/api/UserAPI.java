@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.youtube.R;
 import com.example.youtube.ViewModels.MyApplication;
 import com.example.youtube.entities.User;
+import com.example.youtube.entities.Video;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -45,11 +46,16 @@ public class UserAPI {
 
 
     public void getUserDetails(String token,String userName, Callback<User> callback){
-//        if (token.startsWith("\"") && token.endsWith("\"")) {
-//            token = token.substring(1, token.length() - 1);
-//        }
         Call<User> call = webServiceAPI.getUserDetailsByUserName(token,userName);
         call.enqueue(callback);
     }
+
+
+
+
+    public void createNewVideo(String token, Video newVideo, int id, Callback<Video> callback){
+        Call<Video> call = webServiceAPI.createNewVideo(token, newVideo, id);
+        call.enqueue(callback);
     }
+}
 
