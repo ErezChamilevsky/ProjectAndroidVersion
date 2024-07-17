@@ -9,35 +9,32 @@ import com.example.youtube.repositories.UserRepository;
 
 @Entity
 public class CommentItem {
-
-    String text;
+   
     @PrimaryKey
     public int commentId;
     public int videoId;
     public int userId;
+    String content;
     private static int nextId = 0;
-
-
-    public Uri profileImage;
 
     public CommentItem(){
 
     }
 
+
     public CommentItem(Video video, String text) {
         this.commentId = nextId++;
         this.videoId = video.getId();
-        this.text = text;
+        this.content = text;
         this.userId = UserRepository.getInstance().getLoggedUser().getId();
-        this.profileImage = Uri.parse(UserRepository.getInstance().getLoggedUser().getUserImgFile());
     }
 
     public String getText() {
-        return text;
+        return content;
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.content = text;
     }
 
     public int getCommentId() {
@@ -53,7 +50,7 @@ public class CommentItem {
     }
 
     public Uri getProfileImage() {
-        return profileImage;
+        return Uri.parse(UserRepository.getInstance().findUserById(this.userId).getUserImgFile());
     }
 
     public void onRemoveCommentClick() {

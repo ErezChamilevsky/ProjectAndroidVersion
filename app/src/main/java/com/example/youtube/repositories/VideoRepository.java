@@ -1,8 +1,14 @@
 package com.example.youtube.repositories;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.example.youtube.api.VideoAPI;
 import com.example.youtube.utilities.VideoItem;
 import com.example.youtube.entities.Video;
 import com.google.gson.Gson;
@@ -17,7 +23,12 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class VideoRepository {
+
     private static final VideoRepository ourInstance = new VideoRepository();
     private List<Video> videos = new ArrayList<>();
     private ArrayList<VideoItem> videoItemArrayList = new ArrayList<VideoItem>();
@@ -38,6 +49,16 @@ public class VideoRepository {
         item.setUserProfileImage(video.getUserId());
         videoItemArrayList.add(item);
     }
+
+    public void addVideos(List<Video> videoList) { //added in order to add a list gotten from server
+        for (Video video : videoList) {
+            videos.add(video);
+            VideoItem item = new VideoItem(video);
+            item.setUserProfileImage(video.getUserId());
+            videoItemArrayList.add(item);
+        }
+    }
+
 
 
     public Video findVideoById(int id){
@@ -98,6 +119,8 @@ public class VideoRepository {
         }
     }
 
+
+
     public ArrayList<VideoItem> getVideoItemArrayList(){
         return this.videoItemArrayList;
     }
@@ -105,5 +128,14 @@ public class VideoRepository {
     public void addItemToVideoItemArrayList(VideoItem videoItem){
         this.videoItemArrayList.add(videoItem);
     }
+    public List<VideoItem> addVideoListToItemList(List<Video> videos){ // in use in watching page. but for now in comment
+        List<VideoItem> videosItems = new ArrayList<>();
+        for(Video video : videos){
+            videosItems.add(new VideoItem(video));
+        }
+        return videosItems;
+    }
+
+
 
 }

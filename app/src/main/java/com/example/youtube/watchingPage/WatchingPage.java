@@ -3,12 +3,12 @@ package com.example.youtube.watchingPage;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -16,20 +16,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.youtube.R;
 import com.example.youtube.adapters.VideoItemsRecyclerViewAdapter;
-import com.example.youtube.entities.CommentItem;
-import com.example.youtube.repositories.CommentRepository;
-import com.example.youtube.adapters.CommentsRecycleViewAdapter;
+import com.example.youtube.api.VideoAPI;
 import com.example.youtube.entities.User;
 import com.example.youtube.entities.Video;
 import com.example.youtube.repositories.UserRepository;
 import com.example.youtube.repositories.VideoRepository;
+import com.example.youtube.userPage.UserVideosPage;
 import com.example.youtube.utilities.RecyclerViewInterface;
 import com.example.youtube.utilities.VideoItem;
-
 import java.util.ArrayList;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WatchingPage extends AppCompatActivity implements RecyclerViewInterface {
 
@@ -41,10 +42,9 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
 
     // Data
     private Video video;
-    private ArrayList<VideoItem> videoItemArrayList = VideoRepository.getInstance().getVideoItemArrayList();
-    private ArrayList<CommentItem> commentsList;
+    private ArrayList<VideoItem> videoItemArrayList;
 
-    private CommentsRecycleViewAdapter commentAdapter;
+    private CommentsManager commentsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +56,105 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
 
         // Retrieve video ID from intent
         int vidId = getIntent().getIntExtra("VIDEO_ID", -1);
-        video = VideoRepository.getInstance().findVideoById(vidId);
+        //getting video details from server
+        getVideoFromServer(vidId);
+//        video = VideoRepository.getInstance().findVideoById(vidId);
+
+        //adding to get from server videoItems -
+        getVideosItemListFromServer();
+
 
         if (video == null) {
             // Handle the case where video is not found
-            finish();
-            return;
         }
+        // Initialize UI components - moving all the functions here to be called from the getVideoItemListFromServer
+        //because of asynchronicity
 
-        // Initialize UI components
-        initializeRecyclerViews();
-        setupOtherVideos();
-        setupVideoFragment();
-        setupUserInteractions();
+    }
+
+    void getVideoFromServer(int videoId) {
+
+        VideoAPI videoAPI = new VideoAPI();
+        Log.d(TAG, "getVideoFromServer in watching");
+        videoAPI.getVideo(videoId,new Callback<Video>() {
+
+            @Override
+            public void onResponse(@NonNull Call<Video> call, @NonNull Response<Video> response) {
+                Log.d(TAG, "getVideoFromServer in watching1");
+                handleVideoResponse(call, response);
+            }
+
+            @Override
+            public void onFailure(Call<Video> call, Throwable t) {
+                Log.d(TAG, "getVideoFromServer in watching2");
+                handleVideoFailure(t);
+            }
+        });
+
+    }
+
+    private void handleVideoResponse(Call<Video> call, Response<Video> response) {
+        if (response.isSuccessful()) {
+            Video video = response.body();
+            setVideo(video);
+            Log.d(TAG, "Success: " + video);
+        } else {
+            Log.d(TAG, "Response Code: " + response.code());
+            Log.d(TAG, "Response Message: " + response.message());
+        }
+    }
+
+    private void setVideo(Video video) {
+        Log.d(TAG, "setVideo " + video);
+        this.video = video;
+    }
+
+    private void handleVideoFailure(Throwable t) {
+        Log.e(TAG, "Request Failed: " + t.getMessage());
+
+    }
+
+
+    void getVideosItemListFromServer() {
+
+        VideoAPI videoAPI = new VideoAPI();
+        videoAPI.getVideosToPresent(new Callback<List<Video>>() {
+
+            @Override
+            public void onResponse(@NonNull Call<List<Video>> call, @NonNull Response<List<Video>> response) {
+                Log.d(TAG, "List Response");
+                handleResponse(call, response);
+                getUserFromServer();
+                initializeRecyclerViews();
+                setupOtherVideos();
+                setupVideoFragment();
+                setupUserInteractions();
+            }
+
+            @Override
+            public void onFailure(Call<List<Video>> call, Throwable t) {
+                Log.d(TAG, "List fail");
+                handleFailure(t);
+            }
+        });
+
+    }
+
+    private void handleResponse(Call<List<Video>> call, Response<List<Video>> response) {
+        if (response.isSuccessful()) {
+            List<Video> videos = response.body();
+//            VideoRepository.getInstance().addVideoListToItemList(videos); //because there are no change in the list it should be the same
+            this.videoItemArrayList = VideoRepository.getInstance().getVideoItemArrayList();
+            Log.d(TAG, "List Success: " + videos);
+        } else {
+            Log.d(TAG, "List Response Code: " + response.code());
+            Log.d(TAG, "List Response Message: " + response.message());
+        }
+    }
+
+    private void handleFailure(Throwable t) {
+        Log.e(TAG, "List Request Failed: " + t.getMessage());
+
     }
 
     // Adjust padding based on system insets
@@ -94,10 +180,6 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
 
     // Setup list of other videos in RecyclerView
     private void setupOtherVideos() {
-//        for (int i = 0; i < 9; i++) {
-//            videoItemArrayList.add(new VideoItem(VideoRepository.getInstance().getVideos().get(i)));
-//        }
-
         recyclerView.setAdapter(new VideoItemsRecyclerViewAdapter(this, videoItemArrayList, this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -107,13 +189,12 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
         VideoDisplay fragment = VideoDisplay.newInstance(video.getVideoSrc().toString(), null);
         setVideoFragment(fragment);
         setVideoInPage(video);
-        setUserCard(video);
     }
 
     // Set up user interactions (like, dislike, comment)
     private void setupUserInteractions() {
         setupLikeDislikeButtons();
-        setupCommentSection();
+        commentsManager = new CommentsManager(this, video, commentsRecyclerView);
     }
 
     // Set up like and dislike buttons
@@ -132,49 +213,6 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
         });
 
         setLikes(video); // Initial setup
-    }
-
-    // Set up comments section
-    private void setupCommentSection() {
-        TextView commentsSection = findViewById(R.id.commentsSection);
-        if(UserRepository.getInstance().getLoggedUser() != null) {
-
-
-            EditText newCommentBox = findViewById(R.id.newCommentBox);
-            Button postCommentButton = findViewById(R.id.commentButton);
-            postCommentButton.setText("Send");
-
-            commentsSection.setOnClickListener(v -> toggleCommentsSection());
-
-            postCommentButton.setOnClickListener(v -> {
-                String text = newCommentBox.getText().toString();
-                if (!text.isEmpty()) {
-                    // Add comment to repository
-                    CommentItem comment = new CommentItem(video, text);
-                    CommentRepository.getInstance().addComment(comment);
-                    this.commentsList.add(comment);
-                    // Clear the comment box
-                    newCommentBox.setText("");
-
-                    // Update comments list and notify adapter
-                    commentAdapter.notifyDataSetChanged(); // or notifyItemInserted() if you want to animate insertion
-                }
-            });
-        }
-
-        setCommentsList(); // Initial load
-        setupCommentsRecyclerView();
-    }
-
-    // Toggle visibility of comments section
-    private void toggleCommentsSection() {
-        View commentsContainer = findViewById(R.id.commentsContainer);
-        commentsContainer.setVisibility(commentsContainer.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-    }
-
-    // Set comments list from repository
-    private void setCommentsList() {
-        commentsList = CommentRepository.getInstance().findCommentByVideoId(video.getId());
     }
 
     // Set video fragment in the activity
@@ -219,28 +257,71 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
     }
 
     // Set user card (uploader details) in the UI
-    private void setUserCard(Video video) {
+    private void setUserCard(User user) {
         TextView uploaderName = findViewById(R.id.uploaderName);
         ImageView uploaderAvatar = findViewById(R.id.uploaderAvatar);
 
-        User user = UserRepository.getInstance().findUserById(video.getUserId());
         if (user != null) {
             uploaderName.setText(user.getDisplayName());
             uploaderAvatar.setImageURI(Uri.parse(user.getUserImgFile()));
+
+            View.OnClickListener clickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(WatchingPage.this, UserVideosPage.class);
+                    intent.putExtra("USER_ID", user.getId());
+                    startActivity(intent);
+                }
+            };
+
+            uploaderName.setOnClickListener(clickListener);
+            uploaderAvatar.setOnClickListener(clickListener);
         }
     }
+
+    void getUserFromServer() {
+
+        VideoAPI videoAPI = new VideoAPI();
+        videoAPI.getUserDetailsForVideoPage(video.getUserId(), new Callback<User>() {
+
+            @Override
+            public void onResponse(@NonNull Call<User> call, @NonNull Response<User> response) {
+                Log.d(TAG, "user Response");
+                handleUserResponse(call, response);
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d(TAG, "user fail");
+                handleUserFailure(t);
+            }
+        });
+
+    }
+
+    private void handleUserResponse(Call<User> call, Response<User> response) {
+        if (response.isSuccessful()) {
+            User user = response.body();
+            setUserCard(user);
+
+            Log.d(TAG, "user Success: " + user);
+        } else {
+            Log.d(TAG, "user Response Code: " + response.code());
+            Log.d(TAG, "user Response Message: " + response.message());
+        }
+    }
+
+    private void handleUserFailure(Throwable t) {
+        Log.e(TAG, "user Request Failed: " + t.getMessage());
+
+    }
+
 
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(WatchingPage.this, WatchingPage.class);
         intent.putExtra("VIDEO_ID", videoItemArrayList.get(position).getId());
         startActivity(intent);
-    }
-
-    private void setupCommentsRecyclerView() {
-        this.commentAdapter = new CommentsRecycleViewAdapter(this, commentsList);
-
-        commentsRecyclerView.setAdapter(commentAdapter);
-        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
