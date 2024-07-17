@@ -34,11 +34,11 @@ public interface WebServiceAPI {
     Call<ResponseBody> deleteUser(@Header("Authorization") String token, @Path("id") int id);
 
     // Get comments for a specific video
-    @GET("{pid}/comments")
+    @GET("videos/{pid}/comments")
     Call<List<CommentItem>> getCommentsByVideoId(@Path("pid") int pid);
 
     // Create a new comment for a specific video
-    @POST("/comments/{pid}")
+    @POST("videos/{pid}/comments")
     Call<ResponseBody> createComment(
             @Header("Authorization") String token,
             @Path("pid") int pid,
