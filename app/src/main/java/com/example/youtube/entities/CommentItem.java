@@ -14,7 +14,7 @@ public class CommentItem {
     public int commentId;
     public int videoId;
     public int userId;
-    String content;
+    public String content;
     private static int nextId = 0;
 
     public CommentItem(){

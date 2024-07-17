@@ -28,6 +28,15 @@ public class Video {
     private String img; //changing filed to string
     private String videoSrc; //changing filed to string
     private String title;
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public void setVideoSrc(String videoSrc) {
+        this.videoSrc = videoSrc;
+    }
+
     private String publicationDate;
     private int views;
     private  String description;
@@ -59,6 +68,9 @@ public class Video {
         this.likeFlag = likeFlag;
     }
 
+    public Video(){
+
+    }
  
     //constructor.
     public Video(String displayName, int userId, Uri img, Uri videoSrc, String title, String publicationDate, String description){
@@ -98,14 +110,17 @@ public class Video {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+    public String getImg(){return this.img;}
+    public String getVideoSrc(){return this.videoSrc;}
 
-    public Uri getImg() { //convert to uri
+
+    public Uri getImg1() { //convert to uri
         return Uri.parse("android.resource://" +
                 context.getPackageName() + "/"
                 +context.getResources().getIdentifier(img, "drawable", context.getPackageName()));
     }
 
-    public Uri getVideoSrc() { //convert to uri
+    public Uri getVideoSrc2() { //convert to uri
 
         return Uri.parse("android.resource://" +
                 context.getPackageName() + "/"

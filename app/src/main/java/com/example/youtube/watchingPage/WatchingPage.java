@@ -186,7 +186,7 @@ public class WatchingPage extends AppCompatActivity implements RecyclerViewInter
 
     // Setup video fragment
     private void setupVideoFragment() {
-        VideoDisplay fragment = VideoDisplay.newInstance(video.getVideoSrc().toString(), null);
+        VideoDisplay fragment = VideoDisplay.newInstance(video.getVideoSrc2().toString(), null);
         setVideoFragment(fragment);
         setVideoInPage(video);
     }

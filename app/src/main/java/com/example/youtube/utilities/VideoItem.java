@@ -44,7 +44,7 @@ public class VideoItem extends AppCompatActivity {
 
 
     public VideoItem(Video video) {
-        this.thumbnail = video.getImg();
+        this.thumbnail = video.getImg1();
         this.title = video.getTitle();
         ;
         this.uploaderName = video.getUserName();
