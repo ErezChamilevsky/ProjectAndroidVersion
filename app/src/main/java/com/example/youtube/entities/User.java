@@ -2,9 +2,15 @@ package com.example.youtube.entities;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class User {
+    @PrimaryKey
+    private @NonNull String _id;
     private static int nextId = 1;// Static variable to keep track of the next ID
-    private String _id;
     private int userId = 1;
     private String userName;
     private String userPassword;
@@ -15,8 +21,32 @@ public class User {
     private String userImgFile;
 
 
+    @NonNull
+    public String get_id() {
+        return _id;
+    }
 
-    public User(String userName, String userPassword,String userConfirmPassword ,String displayName, String userImgFile){
+    public void set_id(@NonNull String _id) {
+        this._id = _id;
+    }
+
+    public static int getNextId() {
+        return nextId;
+    }
+
+    public static void setNextId(int nextId) {
+        User.nextId = nextId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public User(String userName, String userPassword, String userConfirmPassword , String displayName, String userImgFile){
         this._id = null;
         this.userId = nextId++; // Assign the next ID and then increment it
         this.userName = userName;

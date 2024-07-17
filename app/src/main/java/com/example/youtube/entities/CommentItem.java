@@ -2,17 +2,25 @@ package com.example.youtube.entities;
 
 import android.net.Uri;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.example.youtube.repositories.UserRepository;
 
+@Entity
 public class CommentItem {
-
-
-    int videoId;
-    int userId;
+   
+    @PrimaryKey
+    public int commentId;
+    public int videoId;
+    public int userId;
     String content;
-    int commentId;
-
     private static int nextId = 0;
+
+    public CommentItem(){
+
+    }
+
 
     public CommentItem(Video video, String text) {
         this.commentId = nextId++;

@@ -12,8 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.room.Room;
 
+import com.example.youtube.api.AppDB;
 import com.example.youtube.api.UserAPI;
+import com.example.youtube.api.UserDao;
 import com.example.youtube.homePage.Homepage;
 import com.example.youtube.R;
 import com.example.youtube.entities.User;
@@ -33,6 +36,9 @@ import retrofit2.Response;
 
 public class LoginScreen extends AppCompatActivity {
     public static String token = null; //token static variable
+    private AppDB appDB;
+    private UserDao userDao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +102,11 @@ public class LoginScreen extends AppCompatActivity {
 
 
                                                 //here we define the user ROOM
-//                                            appDB = Room.databaseBuilder(getApplicationContext(), AppDB.class, "facebookDB")
+//                                            appDB = Room.databaseBuilder(getApplicationContext(), AppDB.class, "youtubeDB")
 //                                                    .allowMainThreadQueries()
 //                                                    .fallbackToDestructiveMigration()
 //                                                    .build();
-//                                            userDao= appDB.userDao();
+//                                            userDao = appDB.userDao();
 //                                            new Thread(() -> userDao.insert(loginUser)).start();
 
                                             }

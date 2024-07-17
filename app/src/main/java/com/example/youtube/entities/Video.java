@@ -15,8 +15,13 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Video {
     private static int nextId = 0;// Static variable to keep track of the next ID
+    @PrimaryKey
     private int id;
     private String displayName;
     private int userId;
@@ -26,14 +31,39 @@ public class Video {
     private String publicationDate;
     private int views;
     private  String description;
-
     private int likes;
-
+  
     private static int likeFlag;
+
+    public static int getNextId() {
+        return nextId;
+    }
+
+    public static void setNextId(int nextId) {
+        Video.nextId = nextId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public int getLikeFlag() {
+        return likeFlag;
+    }
+
+    public void setLikeFlag(int likeFlag) {
+        this.likeFlag = likeFlag;
+    }
+
+ 
     //constructor.
-    public Video(String userName, int userId, Uri img, Uri videoSrc, String title, String publicationDate, String description){
+    public Video(String displayName, int userId, Uri img, Uri videoSrc, String title, String publicationDate, String description){
         this.id  = nextId++;
-        this.displayName = userName;
+        this.displayName = displayName;
         this.userId = userId;
         this.img = img.toString(); //changing filed to string, but we want the constructor still be relevant
         this.videoSrc = videoSrc.toString();

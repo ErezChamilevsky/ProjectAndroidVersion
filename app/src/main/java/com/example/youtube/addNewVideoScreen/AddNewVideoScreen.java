@@ -14,20 +14,27 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.youtube.api.UserAPI;
 import com.example.youtube.homePage.Homepage;
 import com.example.youtube.R;
 import com.example.youtube.entities.Video;
+import com.example.youtube.login.LoginScreen;
 import com.example.youtube.repositories.UserRepository;
 import com.example.youtube.repositories.VideoRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddNewVideoScreen extends AppCompatActivity {
 
@@ -42,8 +49,8 @@ public class AddNewVideoScreen extends AppCompatActivity {
     private Button changeVideoButton;
     private Button changeImgVideoButton;
     private Button uploadVideoBtn;
-    private Uri selectedVideoUri;
-    private Uri ImageVideo;
+    private String selectedVideoUri;
+    private String ImageVideo;
 
 
 
@@ -68,6 +75,7 @@ public class AddNewVideoScreen extends AppCompatActivity {
         changeVideoButton.setOnClickListener(v -> showVideoPickerDialog());
         chooseImgVideobtn.setOnClickListener(v -> showImagePickerDialog());
         changeImgVideoButton.setOnClickListener(v -> showImagePickerDialog());
+        uploadVideoBtn.setOnClickListener(v -> addVideoToServer());
         uploadVideoBtn.setOnClickListener(v -> addVideoToRepo());
 
 
@@ -104,7 +112,7 @@ public class AddNewVideoScreen extends AppCompatActivity {
             publicationDate = dtf.format(now);
         }
 
-        Video uploadVideo = new Video(displayName,userId,this.ImageVideo,this.selectedVideoUri,videoTitle,publicationDate,videoDescription);
+        Video uploadVideo = new Video(displayName,userId,Uri.parse(this.ImageVideo),Uri.parse(this.selectedVideoUri),videoTitle,publicationDate,videoDescription);
         VideoRepository.getInstance().addVideo(uploadVideo); //add video to ArrayList in the Repo.
 
         Intent moveToHomePage = new Intent(this, Homepage.class);
@@ -112,6 +120,55 @@ public class AddNewVideoScreen extends AppCompatActivity {
         Toast.makeText(this, "Video added successfully", Toast.LENGTH_SHORT).show();
 
     }
+
+
+    private void addVideoToServer(){
+
+        EditText videoTitleEditText = findViewById(R.id.newVideoTitle);
+        EditText videoDescriptionEditText = findViewById(R.id.newVideoDescription);
+
+        String videoTitle = videoTitleEditText.getText().toString();
+        String videoDescription = videoDescriptionEditText.getText().toString();
+        String displayName = UserRepository.getInstance().getLoggedUser().getDisplayName();
+        int userId = UserRepository.getInstance().getLoggedUser().getId();
+
+        Video uploadVideo = new Video(displayName,userId,Uri.parse(this.ImageVideo),Uri.parse(this.selectedVideoUri),videoTitle,null,videoDescription);
+
+        UserAPI usersApi = new UserAPI();
+        usersApi.createNewVideo("Bearer " + LoginScreen.token, uploadVideo, userId, new Callback<Video>() {
+            @Override
+            public void onResponse(@NonNull Call<Video> call, @NonNull Response<Video> response) {
+                int statusCode = response.code();
+                if(statusCode == 200){
+                    Video uploadedVideo = response.body();
+
+                    runOnUiThread(() -> {
+                        Toast.makeText(AddNewVideoScreen.this, "Video created successfully", Toast.LENGTH_SHORT).show();
+                    });
+                    Intent moveToHomePage = new Intent(AddNewVideoScreen.this, Homepage.class);
+                    startActivity(moveToHomePage);
+                    //new Thread(() -> appDB.postDao().insert(uploadedVideo)).start();
+                }
+                 else{
+                    runOnUiThread(() -> {
+                        Toast.makeText(AddNewVideoScreen.this, "Failed to create the Video", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Video> call, @NonNull Throwable t) {
+                Toast.makeText(AddNewVideoScreen.this,  "Invalid server call", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        Toast.makeText(this, "Video added successfully", Toast.LENGTH_SHORT).show();
+
+
+    }
+
+
 
 
     // Method to display video picker dialog
@@ -160,15 +217,15 @@ public class AddNewVideoScreen extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_VIDEO_CAPTURE:  //if video is from camera
-                    selectedVideoUri = data.getData();
-                    playVideo(selectedVideoUri);
+                    selectedVideoUri = String.valueOf(data.getData());
+                    playVideo(Uri.parse(selectedVideoUri));
                     // Hide the upload button after the video is selected or captured
                     chooseVideobtn.setVisibility(View.GONE);
                     changeVideoButton.setVisibility(View.VISIBLE);
                     break;
                 case REQUEST_VIDEO_PICK:  //if video is from gallery
-                    selectedVideoUri = data.getData();
-                    playVideo(selectedVideoUri);
+                    selectedVideoUri = String.valueOf(data.getData());
+                    playVideo(Uri.parse(selectedVideoUri));
                     // Hide the upload button after the video is selected or captured
                     chooseVideobtn.setVisibility(View.GONE);
                     changeVideoButton.setVisibility(View.VISIBLE);
@@ -176,7 +233,7 @@ public class AddNewVideoScreen extends AppCompatActivity {
 
                 case REQUEST_IMAGE_CAPTURE:  //if image video is from camera
                     ImageView imageView1 = findViewById(R.id.VideoImageImageView);
-                    ImageVideo = data.getData(); // set the imageVideo field
+                    ImageVideo = String.valueOf(data.getData()); // set the imageVideo field
                     Bundle extras = data.getExtras();
                     if (extras != null) {
                         Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -187,9 +244,9 @@ public class AddNewVideoScreen extends AppCompatActivity {
                     changeImgVideoButton.setVisibility(View.VISIBLE);
                     break;
                 case REQUEST_IMAGE_PICK:   //if image video is from gallery.
-                    ImageVideo = data.getData(); // set the imageVideo field
+                    ImageVideo = String.valueOf(data.getData()); // set the imageVideo field
                     ImageView imageView2 = findViewById(R.id.VideoImageImageView);
-                    imageView2.setImageURI(ImageVideo);
+                    imageView2.setImageURI(Uri.parse(ImageVideo));
                     // Hide the upload button after the image video is selected or captured
                     chooseImgVideobtn.setVisibility(View.GONE);
                     changeImgVideoButton.setVisibility(View.VISIBLE);

@@ -5,10 +5,8 @@ import com.example.youtube.entities.User;
 import com.example.youtube.entities.Video;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import java.util.List;
 import java.util.Map;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -77,5 +75,7 @@ public interface WebServiceAPI {
     @GET("videos/users/{id}/uploads")
     Call<List<Video>> getVideoListByUserId(@Path("id") int id);
 
+    @POST("users/{id}/videos") //this path is to create new video by the user
+    Call<Video> createNewVideo(@Header("Authorization") String token, @Body Video newVideo, @Path("id") int id);
 
 }
